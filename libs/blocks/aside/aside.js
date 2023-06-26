@@ -14,7 +14,7 @@
 * Aside - v5.1
 */
 
-import { decorateBlockBg, decorateBlockText, decorateButtons } from '../../utils/decorate.js';
+import { decorateBlockBg, decorateBlockText } from '../../utils/decorate.js';
 import { createTag } from '../../utils/utils.js';
 
 // standard/default aside uses same text sizes as the split
@@ -32,6 +32,10 @@ const blockConfig = {
     [large]: ['l', 'm'],
   },
 };
+const PLAY_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="play-icon">
+                      <path d="M8 5v14l11-7z"></path> 
+                      <path d="M0 0h24v24H0z" fill="none"></path>
+                  </svg>`;
 
 function getBlockData(el) {
   const variant = variants.find((variantClass) => el.classList.contains(variantClass));
