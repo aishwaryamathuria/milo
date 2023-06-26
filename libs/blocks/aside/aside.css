@@ -137,10 +137,6 @@
   margin-bottom: var(--spacing-s);
 }
 
-.aside.simple .foreground.container .text {
-  margin-bottom: 80px;
-}
-
 .aside .foreground.container .icon-area .icon {
   color: transparent;
 }
@@ -161,6 +157,10 @@
   width: auto;
   object-fit: cover;
   object-position: left top;
+}
+
+.aside.simple .foreground.container .text {
+  margin-bottom: 80px;
 }
 
 .aside.simple .foreground.container .image {
