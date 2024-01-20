@@ -3,12 +3,13 @@
   padding: 0;
 }
 
-.carousel_items {
+.turing .carousel_items {
   display: flex;
   wrap: nowrap;
   overflow: hidden;
 }
-.carousel_item {
+
+.turing .carousel_item {
   position: relative;
   min-width: 200px;
   height: 200px;
@@ -18,7 +19,8 @@
   background-attachment: fixed;
   margin: 20px;
 }
-.carousel_text {
+
+.turing .carousel_text {
   position: absolute;
   bottom: 0;
   left: 50%;
