@@ -10,7 +10,7 @@ const x = document.querySelector(".carousel_items");
 imgList.forEach((img, i) => {
   x.innerHTML = x.innerHTML + `<div class="carousel_item item${i+1}"> <p class="carousel_text">Image ${i+1}</p> </div>`;
   const tmp = x.querySelector('div:last-child');
-  tmp.backgroundImage = `url("${imgList[i]}")`;
+  tmp.style.backgroundImage = `url("${imgList[i]}")`;
 });
 const carouselItems = document.querySelectorAll(".carousel_item");
 const prevBtn = document.querySelector(".prev");
