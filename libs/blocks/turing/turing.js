@@ -1,3 +1,5 @@
+export default function init(el) {
+el.innerHTML = `<div class="carousel-container"><div class="carousel_items"><div class="carousel_item item1"><p class="carousel_text">Image 1</p></div><div class="carousel_item item2"><p class="carousel_text">Image 2</p></div><div class="carousel_item item3"><p class="carousel_text">Image 3</p></div><div class="carousel_item item4"><p class="carousel_text">Image 4</p></div><div class="carousel_item item5"><p class="carousel_text">Image 5</p></div></div></div>`;
 const carouselItems = document.querySelectorAll(".carousel_item");
 const prevBtn = document.querySelector(".prev");
 const nextBtn = document.querySelector(".next");
@@ -28,3 +30,4 @@ setInterval(() => {
     i = 0;
   }
 }, 2000);
+}
