@@ -8,7 +8,7 @@ const imgList = ['https://images.unsplash.com/photo-1426604966848-d7adac402bff?i
           ]
 const x = document.querySelector(".carousel_items");
 imgList.forEach((img, i) => {
-  x.innerHTML = x.innerHTML + `<div class="carousel_item item4"> <p class="carousel_text">Image 4</p> </div>`;
+  x.innerHTML = x.innerHTML + `<div class="carousel_item item${i+1}"> <p class="carousel_text">Image ${i+1}</p> </div>`;
   const tmp = x.querySelector('div:last-child');
   tmp.backgroundImage = `url("${imgList[i]}")`;
 });
