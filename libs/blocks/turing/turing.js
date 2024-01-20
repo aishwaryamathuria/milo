@@ -7,11 +7,13 @@ const imgList = ['https://images.unsplash.com/photo-1426604966848-d7adac402bff?i
           'https://images.unsplash.com/photo-1673901736622-c3f06b08511f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=874&q=80',
           ]
 const x = document.querySelector(".carousel_items");
-imgList.forEach((img, i) => {
-  x.innerHTML = x.innerHTML + `<div class="carousel_item item${i+1}"> <p class="carousel_text">Image ${i+1}</p> </div>`;
-  const tmp = x.querySelector('div:last-child');
-  tmp.style.backgroundImage = `url("${imgList[i]}")`;
-});
+for (let j = 0; j<=10; j++) {
+  imgList.forEach((img, i) => {
+    x.innerHTML = x.innerHTML + `<div class="carousel_item item${i+1}"> <p class="carousel_text">Image ${i+1}</p> </div>`;
+    const tmp = x.querySelector('div:last-child');
+    tmp.style.backgroundImage = `url("${imgList[i]}")`;
+  });
+}
 const carouselItems = document.querySelectorAll(".carousel_item");
 const prevBtn = document.querySelector(".prev");
 const nextBtn = document.querySelector(".next");
