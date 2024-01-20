@@ -10,8 +10,8 @@
 }
 .carousel_item {
   position: relative;
-  min-width: 20%;
-  height: 500px;
+  min-width: 200px;
+  height: 200px;
   transition: all 0.5s linear;
   background-repeat: no-repeat;
   background-size: cover;
