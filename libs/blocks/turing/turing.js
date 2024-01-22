@@ -1,3 +1,22 @@
+function genKeywords() {
+  if (!window.turing) return;
+  const c = document.querySelector('main .section').innerText;
+  const options = {
+  method: 'POST',
+  headers: {
+    'x-api-key': window.turing.firefall.x-api-key,
+    'x-gw-ims-org-id': window.turing.firefall.x-gw-ims-org-id,
+    'Authorization': window.turing.firefall.Authorization,
+    'Content-Type': 'application/json'
+  },
+  body: `{"messages":[{"role":"user","content":"Generate 1 keyword for following text - ${c}"}],"llm_metadata":{"model_name":"gpt-4","llm_type":"azure_chat_openai","temperature":0.7,"max_tokens":256,"top_p":1,"frequency_penalty":0,"presence_penalty":0,"n":1,"stop":["\n","  ","\t"]}}`
+};
+
+fetch('https://firefall-stage.adobe.io/v1/chat/completions', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+}
 export default function init(el) {
 el.innerHTML = `<div class="carousel-container"><div class="carousel_items"></div></div>`;
 const imgList = ['https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
