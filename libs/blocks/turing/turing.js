@@ -18,6 +18,7 @@ fetch('https://firefall-stage.adobe.io/v1/chat/completions', options)
   .catch(err => console.error(err));
 }
 export default function init(el) {
+genKeywords();
 el.innerHTML = `<div class="carousel-container"><div class="carousel_items"></div></div>`;
 const imgList = ['https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
           'https://images.unsplash.com/photo-1501862700950-18382cd41497?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=519&q=80',
