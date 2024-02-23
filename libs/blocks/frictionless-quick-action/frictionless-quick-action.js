@@ -51,7 +51,7 @@ function startSDK(data) {
     ];
 
     ccEverywhere.openQuickAction({
-      id: quickAction,
+      id: document.querySelector('.tmpiframe'),
       inputParams: {
         asset: {
           data,
