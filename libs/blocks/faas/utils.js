@@ -3,21 +3,22 @@
 import {
   loadStyle,
   loadScript,
-  getConfig,
+  getHelixEnv,
   createTag,
-  localizeLink,
-} from '../../utils/utils.js';
+  getIconElement,
+} from '../../scripts/utils.js';
 
-const { env, miloLibs, codeRoot } = getConfig();
 let state = {};
 
 export const getFaasHostSubDomain = (environment) => {
   const { searchParams } = new URL(window.location.href);
   const faasEnv = environment ?? searchParams.get('faas-env');
+  const env = getHelixEnv();
   if (env.name === 'prod' || faasEnv === 'prod') {
     return '';
   }
-  if (faasEnv === 'stage') {
+  // fixme: temporary fix because FaaS returns 403 on other staging domains.
+  if (window.location.hostname === 'www.stage.adobe.com' || faasEnv === 'stage') {
     return 'staging.';
   }
   if (faasEnv === 'dev') {
@@ -26,16 +27,15 @@ export const getFaasHostSubDomain = (environment) => {
   if (faasEnv === 'qa') {
     return 'qa.';
   }
-  return 'qa.';
+  return 'dev.';
 };
 
-const base = miloLibs || codeRoot;
 export const faasHostUrl = `https://${getFaasHostSubDomain()}apps.enterprise.adobe.com`;
-const faasCurrentJS = base.includes('localhost') ? `${base}/deps/jquery.faas-current.js` : `${faasHostUrl}/faas/service/jquery.faas-current.js`;
+const faasCurrentJS = `${faasHostUrl}/faas/service/jquery.faas-current.js`;
 export const loadFaasFiles = () => {
-  loadStyle(`${base}/blocks/faas/faas.css`);
+  loadStyle('/express/blocks/faas/faas.css');
   return Promise.all([
-    loadScript(`${base}/deps/jquery-3.6.0.min.js`).then(() => loadScript(faasCurrentJS)),
+    loadScript('/express/scripts/libs/jquery-3.6.0.min.js').then(() => loadScript(faasCurrentJS)),
   ]);
 };
 
@@ -248,11 +248,34 @@ const beforeSubmitCallback = () => {
       }),
     })
       .catch((error) => {
-        window.lana.log('AA Sandbox Error:', error);
+        window.lana.log(`AA Sandbox Error: ${error.toString()}`);
       });
   }
 };
 /* c8 ignore stop */
+
+const afterSubmitCallback = (e) => {
+  if (!e.success) return;
+  const faas = document.querySelector('.faas-form');
+  if (!faas) return;
+  const dialogModal = faas.closest('.dialog-modal');
+  if (dialogModal) {
+    const closeBtn = dialogModal.querySelector('.dialog-close');
+    const faasFormWrapper = dialogModal.querySelector('.faas-form-wrapper');
+
+    if (faasFormWrapper) {
+      const overlay = createTag('div', { class: 'faas-form-confirm-overlay' });
+      const checkIcon = getIconElement('checkmark-green');
+      overlay.append(checkIcon);
+      faasFormWrapper.append(overlay);
+
+      checkIcon.addEventListener('animationend', () => {
+        faas.reset();
+        if (closeBtn) closeBtn.click();
+      }, { passive: true });
+    }
+  }
+};
 
 export const makeFaasConfig = (targetState) => {
   if (!targetState) {
@@ -260,12 +283,24 @@ export const makeFaasConfig = (targetState) => {
     return state;
   }
 
+  const url = targetState.d;
+  let destinationURL = '';
+  try {
+    // checking if URL is absolute.
+    // eslint-disable-next-line no-new
+    new URL(url);
+    destinationURL = targetState.d;
+  } catch (e) {
+    // in case of relative:
+    destinationURL = window.location.origin + targetState.d;
+  }
+
   const config = {
     multicampaignradiostyle: targetState.multicampaignradiostyle ?? false,
     hidePrepopulated: targetState.hidePrepopulated ?? false,
     id: targetState.id,
     l: targetState.l,
-    d: localizeLink(targetState.d),
+    d: destinationURL,
     as: targetState.as,
     ar: targetState.ar,
     pc: {
@@ -293,6 +328,7 @@ export const makeFaasConfig = (targetState) => {
     e: {
       afterYiiLoadedCallback,
       beforeSubmitCallback,
+      afterSubmitCallback,
     },
     style_backgroundTheme: targetState.style_backgroundTheme || 'white',
     style_layout: targetState.style_layout || 'column1',
@@ -352,11 +388,7 @@ export const initFaas = (config, targetEl) => {
   if (state.complete) {
     if (state.js) {
       Object.keys(state.js).forEach((key) => {
-        if (key === 'd') {
-          state[key] = localizeLink(state.js[key]);
-        } else {
-          state[key] = state.js[key];
-        }
+        state[key] = state.js[key];
       });
       delete state.js;
     }

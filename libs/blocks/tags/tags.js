@@ -1,26 +1,27 @@
-import { getTaxonomyModule, loadTaxonomy, computeTaxonomyFromTopics, getLinkForTopic } from '../article-feed/article-helpers.js';
-import { createTag } from '../../utils/utils.js';
+// eslint-disable-next-line import/no-unresolved
+import { normalizeHeadings } from '../../scripts/utils.js';
 
-export default async function init(blockEl) {
-  const tags = blockEl.firstElementChild?.firstElementChild?.textContent;
+/**
+ * Retrieves the content of a metadata tag.
+ * @param {string} name The metadata name (or property)
+ * @returns {string} The metadata value
+ */
+export function getMetadata(name) {
+  const attr = name && name.includes(':') ? 'property' : 'name';
+  const meta = [...document.head.querySelectorAll(`meta[${attr}="${name}"]`)].map((el) => el.content).join(', ');
+  return meta;
+}
 
-  if (!tags) return;
-
-  if (!getTaxonomyModule()) {
-    await loadTaxonomy();
-  }
-
-  blockEl.innerHTML = '';
-  const tagsArray = tags.split(', ').map((tag) => tag.trim());
-  const articleTax = computeTaxonomyFromTopics(tagsArray);
-  const tagsWrapper = createTag('p');
-
-  articleTax.visibleTopics?.forEach((topic) => {
-    const link = getLinkForTopic(topic);
-    const parser = new DOMParser();
-    const linkElement = parser.parseFromString(link, 'text/html').body.firstChild;
-    tagsWrapper.appendChild(linkElement);
+export default function decorate(block) {
+  normalizeHeadings(block, ['h3']);
+  const tags = getMetadata('article:tag');
+  tags.split(',').forEach((tag) => {
+    if (tag) {
+      const link = document.createElement('a');
+      link.innerHTML = tag.trim();
+      link.href = '#';
+      link.classList.add('medium', 'secondary', 'button');
+      block.appendChild(link);
+    }
   });
-
-  blockEl.append(tagsWrapper);
 }

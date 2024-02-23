@@ -1,4 +1,4 @@
-import { html, signal, useEffect } from '../../../deps/htm-preact.js';
+import { html, signal, useEffect } from '../../../scripts/libs/htm-preact.js';
 
 const DEF_ICON = 'purple';
 const DEF_DESC = 'Checking...';
@@ -50,32 +50,28 @@ async function checkTitle() {
 }
 
 async function checkCanon() {
-  const result = { ...canonResult.value };
   const canon = document.querySelector("link[rel='canonical']");
-  if (!canon) {
-    result.icon = pass;
-    result.description = 'Canonical is self-referencing.';
-  } else {
-    const { href } = canon;
-    try {
-      const resp = await fetch(href, { method: 'HEAD' });
-      if (!resp.ok) {
-        result.icon = fail;
-        result.description = 'Reason: Error with canonical reference.';
-      }
-      if (resp.ok) {
-        if (resp.status >= 300 && resp.status <= 308) {
-          result.icon = fail;
-          result.description = 'Reason: Canonical reference redirects.';
-        } else {
-          result.icon = pass;
-          result.description = 'Canonical referenced is valid.';
-        }
-      }
-    } catch (e) {
-      result.icon = limbo;
-      result.description = 'Canonical cannot be crawled.';
+  const result = { ...canonResult.value };
+  const { href } = canon;
+
+  try {
+    const resp = await fetch(href, { method: 'HEAD' });
+    if (!resp.ok) {
+      result.icon = fail;
+      result.description = 'Reason: Error with canonical reference.';
     }
+    if (resp.ok) {
+      if (resp.status >= 300 && resp.status <= 308) {
+        result.icon = fail;
+        result.description = 'Reason: Canonical reference redirects.';
+      } else {
+        result.icon = pass;
+        result.description = 'Canonical referenced is valid.';
+      }
+    }
+  } catch (e) {
+    result.icon = limbo;
+    result.description = 'Canonical cannot be crawled.';
   }
   canonResult.value = result;
   return result.icon;
@@ -139,6 +135,7 @@ async function checkLinks() {
 
   let badLink;
   for (const link of links) {
+    // eslint-disable-next-line no-await-in-loop
     const resp = await fetch(link.href, { method: 'HEAD' });
     if (!resp.ok) badLink = true;
   }
@@ -219,7 +216,9 @@ async function getResults() {
 }
 
 export default function Panel() {
-  useEffect(() => { getResults(); }, []);
+  useEffect(() => {
+    getResults();
+  }, []);
 
   return html`
       <div class=seo-columns>

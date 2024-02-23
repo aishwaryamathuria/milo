@@ -1,30 +1,12 @@
-import { createTag } from '../../utils/utils.js';
+import {
+  createTag,
+} from '../../scripts/utils.js';
 
 const LIBRARY_PATH = '/docs/library/library.json';
 
 async function loadBlocks(content, list, query) {
   const { default: blocks } = await import('./lists/blocks.js');
   blocks(content, list, query);
-}
-
-async function loadPlaceholders(content, list) {
-  const { default: placeholders } = await import('./lists/placeholders.js');
-  placeholders(content, list);
-}
-
-async function loadIcons(content, list) {
-  const { default: icons } = await import('./lists/icons.js');
-  icons(content, list);
-}
-
-async function loadAssets(content, list) {
-  const { default: assets } = await import('./lists/assets.js');
-  assets(content, list);
-}
-
-async function loadPersonalization(content, list) {
-  const { default: personalization } = await import('./lists/personalization.js');
-  personalization(content, list);
 }
 
 function addSearch(content, list) {
@@ -60,33 +42,12 @@ function addSearch(content, list) {
 async function loadList(type, content, list) {
   list.innerHTML = '';
   const query = list.closest('.sk-library').querySelector('.sk-library-search-input')?.value;
-  switch (type) {
-    case 'blocks':
-      addSearch(content, list);
-      loadBlocks(content, list, query);
-      break;
-    case 'placeholders':
-      loadPlaceholders(content, list);
-      break;
-    case 'icons':
-      loadIcons(content, list);
-      break;
-    case 'assets':
-      loadAssets(content, list);
-      break;
-    case 'personalization_tags':
-      loadPersonalization(content, list);
-      break;
-    default:
-      await import('../../utils/lana.js');
-      window.lana?.log(`Library type not supported: ${type}`, { clientId: 'milo' });
-  }
+  addSearch(content, list);
+  loadBlocks(content, list, query);
 }
 
 async function fetchLibrary(domain) {
-  const { searchParams } = new URL(window.location.href);
-  const suppliedLibrary = searchParams.get('library');
-  const library = suppliedLibrary || `${domain}${LIBRARY_PATH}`;
+  const library = `${domain}${LIBRARY_PATH}`;
   try {
     const resp = await fetch(library);
     if (!resp.ok) return null;
@@ -94,50 +55,6 @@ async function fetchLibrary(domain) {
   } catch {
     return null;
   }
-}
-
-async function getSuppliedLibrary() {
-  const { searchParams } = new URL(window.location.href);
-  const repo = searchParams.get('repo');
-  const owner = searchParams.get('owner');
-  if (!repo || !owner) return null;
-  return fetchLibrary(`https://main--${repo}--${owner}.hlx.live`);
-}
-
-async function fetchAssetsData(path) {
-  if (!path) return null;
-  const resp = await fetch(path);
-  if (!resp.ok) return null;
-
-  const json = await resp.json();
-  const assetHrefs = json.entities.map((entity) => entity.links[0].href);
-  return assetHrefs;
-}
-
-async function combineLibraries(base, supplied) {
-  const url = new URL(window.location.href);
-
-  const assetsPath = url.searchParams.get('assets');
-
-  const library = {
-    assets: await fetchAssetsData(assetsPath),
-    blocks: base.blocks.data,
-    icons: base.icons?.data,
-    personalization_tags: base.personalization?.data,
-    placeholders: base.placeholders?.data,
-  };
-
-  if (supplied) {
-    if (supplied.blocks.data.length > 0) {
-      library.blocks.push(...supplied.blocks.data);
-    }
-
-    if (supplied.placeholders.data.length > 0) {
-      library.placeholders = supplied.placeholders.data;
-    }
-  }
-
-  return library;
 }
 
 function createList(libraries) {
@@ -149,7 +66,8 @@ function createList(libraries) {
   Object.keys(libraries).forEach((type) => {
     if (!libraries[type] || libraries[type].length === 0) return;
 
-    const item = createTag('li', { class: 'content-type' }, type.replace('_', ' '));
+    const item = createTag('li', { class: 'content-type' });
+    item.innerText = type.replace('_', ' ');
     libraryList.append(item);
 
     const list = document.createElement('ul');
@@ -170,10 +88,15 @@ function createList(libraries) {
 }
 
 function createHeader() {
-  const nav = createTag('button', { class: 'sk-library-logo' }, 'Franklin Library');
-  const title = createTag('div', { class: 'sk-library-title' }, nav);
-  title.append(createTag('p', { class: 'sk-library-title-text' }, 'Pick a library'));
-  const header = createTag('div', { class: 'sk-library-header' }, title);
+  const nav = createTag('button', { class: 'sk-library-logo' });
+  nav.innerText = 'Franklin Library';
+  const title = createTag('div', { class: 'sk-library-title' });
+  title.append(nav);
+  const libraryText = createTag('p', { class: 'sk-library-title-text' });
+  libraryText.innerText = 'Pick a library';
+  title.append(libraryText);
+  const header = createTag('div', { class: 'sk-library-header' });
+  header.append(title);
 
   nav.addEventListener('click', (e) => {
     const skLibrary = e.target.closest('.sk-library');
@@ -200,8 +123,9 @@ export default async function init(el) {
 
   // Get the data
   const base = await fetchLibrary(window.location.origin);
-  const supplied = await getSuppliedLibrary();
-  const libraries = await combineLibraries(base, supplied);
+  const library = {
+    blocks: base.data,
+  };
 
   // Create the UI
   const skLibrary = createTag('div', { class: 'sk-library' });
@@ -209,7 +133,7 @@ export default async function init(el) {
   const header = createHeader();
   skLibrary.append(header);
 
-  const list = createList(libraries);
+  const list = createList(library);
   skLibrary.append(list);
 
   el.append(skLibrary);

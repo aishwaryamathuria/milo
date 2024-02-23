@@ -52,6 +52,10 @@
   margin: 0;
 }
 
+.region-nav a {
+  text-decoration: none;
+}
+
 .region-nav > div:nth-of-type(2) {
   column-count: 1;
 }

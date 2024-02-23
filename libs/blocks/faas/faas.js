@@ -1,7 +1,18 @@
-import { parseEncodedConfig, createIntersectionObserver } from '../../utils/utils.js';
+import { createIntersectionObserver } from '../../scripts/utils.js';
 import { initFaas, loadFaasFiles } from './utils.js';
 
 const ROOT_MARGIN = 1000;
+
+const b64ToUtf8 = (str) => decodeURIComponent(escape(window.atob(str)));
+
+function parseEncodedConfig(encodedConfig) {
+  try {
+    return JSON.parse(b64ToUtf8(decodeURIComponent(encodedConfig)));
+  } catch (e) {
+    console.log(e);
+  }
+  return null;
+}
 
 const loadFaas = async (a) => {
   await loadFaasFiles();

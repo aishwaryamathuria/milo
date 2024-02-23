@@ -1,4 +1,5 @@
-import { html, signal, useEffect } from '../../../deps/htm-preact.js';
+/* eslint-disable max-statements-per-line */
+import { html, signal, useEffect } from '../../../scripts/libs/htm-preact.js';
 
 const NOT_FOUND = { preview: { lastModified: 'Not found' }, live: { lastModified: 'Not found' } };
 
@@ -19,7 +20,12 @@ async function getStatus(url) {
   const preview = json.preview.lastModified || 'Never';
   const live = json.live.lastModified || 'Never';
   const edit = json.edit.url;
-  return { url, edit, preview, live };
+  return {
+    url,
+    edit,
+    preview,
+    live,
+  };
 }
 
 function getStatuses() {
@@ -46,14 +52,26 @@ function getUrl(el) {
 
 function findLinks(selector) {
   return [...document.body.querySelectorAll(selector)]
-    .map((el) => ({ url: getUrl(el), edit: null, preview: 'Fetching', live: 'Fetching' }));
+    .map((el) => ({
+      url: getUrl(el),
+      edit: null,
+      preview: 'Fetching',
+      live: 'Fetching',
+    }));
 }
 
 async function setContent() {
   if (content.value.page) return;
 
   content.value = {
-    page: { items: [{ url: new URL(window.location.href), edit: null, preview: 'Fetching', live: 'Fetching' }] },
+    page: {
+      items: [{
+        url: new URL(window.location.href),
+        edit: null,
+        preview: 'Fetching',
+        live: 'Fetching',
+      }],
+    },
     fragments: { items: findLinks('main .fragment, a[data-modal-path]') },
     links: { items: findLinks('main a[href^="/"') },
     nav: { items: findLinks('header a[href^="/"'), closed: true },

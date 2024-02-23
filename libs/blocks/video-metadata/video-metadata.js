@@ -1,5 +1,6 @@
-import { createTag } from '../../utils/utils.js';
-import { getMetadata } from '../section-metadata/section-metadata.js';
+import {
+  createTag,
+} from '../../scripts/utils.js';
 
 const LINES2ARRAY_SPLIT_RE = /\s*?\r?\n\s*/;
 const BROADCAST_EVENT_RE = /broadcast-event-(\d+)-([\w-]+)/;
@@ -25,7 +26,8 @@ function addBroadcastEventField(videoObj, blockKey, blockValue) {
       videoObj.publication[i][camelize(key)] = blockValue;
       break;
     default:
-      window.lana.log(`VideoMetadata -- Unknown BroadcastEvent property: ${blockKey}`);
+      // eslint-disable-next-line no-console
+      console.log(`VideoMetadata -- Unknown BroadcastEvent property: ${blockKey}`);
       break;
   }
 }
@@ -45,7 +47,8 @@ function addClipField(videoObj, blockKey, blockValue) {
       videoObj.hasPart[i][camelize(key)] = blockValue;
       break;
     default:
-      window.lana.log(`VideoMetadata -- Unhandled Clip property: ${blockKey}`);
+      // eslint-disable-next-line no-console
+      console.log(`VideoMetadata -- Unhandled Clip property: ${blockKey}`);
       break;
   }
 }
@@ -61,7 +64,8 @@ function addSeekToActionField(videoObj, blockKey, blockValue) {
       videoObj.potentialAction['startOffset-input'] = blockValue;
       break;
     default:
-      window.lana.log(`VideoMetadata -- Unhandled SeekToAction property: ${blockKey}`);
+      // eslint-disable-next-line no-console
+      console.log(`VideoMetadata -- Unhandled SeekToAction property: ${blockKey}`);
       break;
   }
 }
@@ -70,7 +74,7 @@ export function createVideoObject(blockMap) {
   const video = {};
   Object.entries(blockMap).forEach(([key, val]) => {
     const blockVal = val.content && val.content.textContent.trim();
-    if (!blockVal) return;
+    if (!blockVal && key !== 'regions allowed') return;
     const blockKey = key && key.replaceAll(' ', '-');
     switch (true) {
       case blockKey === 'content-url':
@@ -97,7 +101,8 @@ export function createVideoObject(blockMap) {
         addSeekToActionField(video, blockKey, blockVal);
         break;
       default:
-        window.lana.log(`VideoMetadata -- Unhandled VideoObject property: ${blockKey}`);
+        // eslint-disable-next-line no-console
+        console.log(`VideoMetadata -- Unhandled VideoObject property: ${blockKey}`);
         break;
     }
   });
@@ -110,11 +115,22 @@ export function createVideoObject(blockMap) {
   return null;
 }
 
+const getMetadata = (el) => [...el.childNodes].reduce((rdx, row) => {
+  if (row.children) {
+    const key = row.children[0].textContent.trim().toLowerCase();
+    const content = row.children[1];
+    const text = content.textContent.trim().toLowerCase();
+    if (key && content) rdx[key] = { content, text };
+  }
+  return rdx;
+}, {});
+
 export default function init(el) {
   const metadata = getMetadata(el);
   el.remove();
   const obj = createVideoObject(metadata);
   if (!obj) return;
-  const script = createTag('script', { type: 'application/ld+json' }, JSON.stringify(obj));
+  const script = createTag('script', { type: 'application/ld+json' });
+  script.textContent = JSON.stringify(obj);
   document.head.append(script);
 }
