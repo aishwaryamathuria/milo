@@ -237,6 +237,11 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
                 height: 600,
                 unit: 'px',
             },
+            minSize: {
+                width: 500,
+                height: 500,
+                unit: 'px',
+            },
             padding: 0,
             backgroundColor: 'white',
           },     
@@ -283,6 +288,11 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
             size: {
                 width: 800,
                 height: 600,
+                unit: 'px',
+            },
+            minSize: {
+                width: 500,
+                height: 500,
                 unit: 'px',
             },
             padding: 0,
