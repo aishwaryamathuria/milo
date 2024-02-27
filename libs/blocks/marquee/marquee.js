@@ -142,9 +142,9 @@ export default async function init(el) {
     <polyline points="16 12 12 8 8 12" stroke="#fff"/>
     <line stroke="#fff" x1="12" y1="16" x2="12" y2="8"/>
   </svg>`;
-  el.querySelector('.action-area').innerHTML += `<label id="file-input-label" for="file-input">${inputSvg} Select a File</label><input type='file' class='upload-file' id="file-input" name="file-input" />`;
-  el.querySelector('.action-area #file-input-label').className = el.querySelector('.action-area #file-input-label').className + ' blue ' + el.querySelector('.action-area .con-button').className;
-  el.querySelector('.action-area .upload-file').addEventListener('change', (e) => {
+  el.querySelector('.foreground .asset.image').innerHTML += `<label id="file-input-label" for="file-input">${inputSvg} Select a File</label><input type='file' class='upload-file' id="file-input" name="file-input" />`;
+  el.querySelector('.foreground .asset.image #file-input-label').className = el.querySelector('.action-area #file-input-label').className + ' blue ' + el.querySelector('.action-area .con-button').className;
+  el.querySelector('.foreground .asset.image .upload-file').addEventListener('change', (e) => {
     var file = e.target.files[0];
     if (!file) {
         console.error('No file selected');
