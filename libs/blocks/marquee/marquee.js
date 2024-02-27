@@ -218,6 +218,13 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           id: 'download-button',
           optionType: 'button',
           buttonType: 'native',
+        }, {
+          target: 'Host',
+          id: 'my-custom-button',
+          label: 'Embed in app',
+          closeTargetOnExport: true,
+          optionType: 'button',
+          buttonType: 'custom'
         },
       ];
         ccEverywhere.openQuickAction({
@@ -266,6 +273,13 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           id: 'download-button',
           optionType: 'button',
           buttonType: 'native',
+        }, {
+          target: 'Host',
+          id: 'my-custom-tryit',
+          label: 'Try it!',
+          closeTargetOnExport: true,
+          optionType: 'button',
+          buttonType: 'custom'
         },
       ];
         ccEverywhere.openQuickAction({
