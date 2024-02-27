@@ -234,7 +234,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
             parentElementId: `cceverywherediv-${qaname}`,
             minSize: {
                 width: 700,
-                height: 700,
+                height: 600,
                 unit: 'px',
             },
             padding: 0,
@@ -282,7 +282,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
             parentElementId: `cceverywherediv-${qaname}`,
             minSize: {
                 width: 700,
-                height: 700,
+                height: 600,
                 unit: 'px',
             },
             padding: 0,
