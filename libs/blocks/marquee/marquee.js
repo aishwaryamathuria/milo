@@ -244,10 +244,10 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       });
     });
   } else {
+    if (window.CCEverywhere) {
+      window.CCEverywhere.terminate();
+    }
     loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
-      if (window.CCEverywhere) {
-        window.CCEverywhere.terminate();
-      }
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
