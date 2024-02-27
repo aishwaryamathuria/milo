@@ -248,9 +248,6 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (window.CCEverywhere) {
         window.CCEverywhere.terminate();
       }
-      if (!window.CCEverywhere) {
-        return;
-      }
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
