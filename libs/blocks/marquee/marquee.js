@@ -132,7 +132,7 @@ export default async function init(el) {
   if (el.classList.contains('mnemonic-list') && foreground) {
     await loadMnemonicList(foreground);
   }
-  addtoIframe();
+  addtoIframe(el);
 }
 
 
