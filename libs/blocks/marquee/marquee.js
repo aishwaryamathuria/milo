@@ -287,7 +287,10 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
             },
             padding: 0,
             backgroundColor: 'white',
-          },
+          },        
+          callbacks: {
+            onLoad: () => { console.log('mathuria', document.querySelector('x-embed-header-bar'))},
+          }
         });
       });
   }
