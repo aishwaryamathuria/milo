@@ -160,7 +160,7 @@ async function fetchAndConvertToBase64(url, callback) {
 }
 
 
-export default function addtoIframe(el) {
+export function addtoIframe(el) {
   let ccEverywhere;
   const qaname = 'crop-image';
   el.querySelector('.asset').id = 'cceverywherediv';
