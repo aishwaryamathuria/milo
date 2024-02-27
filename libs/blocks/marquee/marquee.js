@@ -134,6 +134,28 @@ export default async function init(el) {
   }
   addtoIframe(el);
   el.querySelector('.foreground .asset').innerHTML = '';
+
+  const inputSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" stroke="#fff"/>
+    <polyline points="16 12 12 8 8 12" stroke="#fff"/>
+    <line stroke="#fff" x1="12" y1="16" x2="12" y2="8"/>
+  </svg>`;
+  el.querySelector('.action-area').innerHTML += `<label id="file-input-label" for="file-input">${inputSvg} Select a File</label><input type='file' class='upload-file' id="file-input" name="file-input" />`;
+  
+  el.querySelector('.action-area #file-input-label').className = el.querySelector('.action-area #file-input-label').className + ' blue ' + el.querySelector('.action-area .con-button').className;
+  el.querySelector('.action-area .upload-file').addEventListener('change', (e) => {
+    var file = e.target.files[0];
+    if (!file) {
+        console.error('No file selected');
+        return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var base64String = e.target.result;
+      addtoIframe(el, true, base64String);
+    };
+    reader.readAsArrayBuffer(file);
+  });
 }
 
 
@@ -161,7 +183,7 @@ async function fetchAndConvertToBase64(url, callback) {
 }
 
 
-export function addtoIframe(el) {
+export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
   let ccEverywhere;
   let qaname = '';
   const regex = 
@@ -173,60 +195,112 @@ export function addtoIframe(el) {
   });
   // const qaname = 'crop-image';
   el.querySelector('.foreground .asset').id = `cceverywherediv-${qaname}`;
-  // el.querySelector('.asset').innerHTML += `<div id='cceverywherediv-${qaname}' class='cceverywherediv'></div>`;
-  const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
-  fetchAndConvertToBase64(imageUrl, base64String => {
-    // console.log('Base64 string:', base64String);
-    loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
-    if (!window.CCEverywhere) {
-      return;
-    }
-    if (!ccEverywhere) {
-      let env = 'preprod';
-      ccEverywhere = await window.CCEverywhere.initialize({
-        clientId: 'b20f1d10b99b4ad892a856478f87cec3',
-        appName: 'express',
-      }, {
-        loginMode: 'delayed',
-        env,
-      });
-    }
-
-    const exportOptions = [
-      {
-        target: 'Download',
-        id: 'download-button',
-        optionType: 'button',
-        buttonType: 'native',
-      },
-      {
-        target: 'Editor',
-        id: 'edit-in-express',
-        buttonType: 'native',
-        optionType: 'button',
-      },
-    ];
-      ccEverywhere.openQuickAction({
-        id: qaname,
-        inputParams: {
-          asset: {
-            data: base64String,
-            dataType: 'base64',
-            type: 'image',
-          },
-          exportOptions,
+  if (!fetchAndConvert) {
+    const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
+    fetchAndConvertToBase64(imageUrl, base64String => {
+      loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
+      if (!window.CCEverywhere) {
+        return;
+      }
+      if (!ccEverywhere) {
+        let env = 'preprod';
+        ccEverywhere = await window.CCEverywhere.initialize({
+          clientId: 'b20f1d10b99b4ad892a856478f87cec3',
+          appName: 'express',
+        }, {
+          loginMode: 'delayed',
+          env,
+        });
+      }
+  
+      const exportOptions = [
+        {
+          target: 'Download',
+          id: 'download-button',
+          optionType: 'button',
+          buttonType: 'native',
         },
-        modalParams: {
-          parentElementId: `cceverywherediv-${qaname}`,
-          minSize: {
-              width: 500,
-              height: 500,
-              unit: 'px',
-          },
-          padding: 0,
-          backgroundColor: 'white',
+        {
+          target: 'Editor',
+          id: 'edit-in-express',
+          buttonType: 'native',
+          optionType: 'button',
         },
+      ];
+        ccEverywhere.openQuickAction({
+          id: qaname,
+          inputParams: {
+            asset: {
+              data: base64String,
+              dataType: 'base64',
+              type: 'image',
+            },
+            exportOptions,
+          },
+          modalParams: {
+            parentElementId: `cceverywherediv-${qaname}`,
+            minSize: {
+                width: 500,
+                height: 500,
+                unit: 'px',
+            },
+            padding: 0,
+            backgroundColor: 'white',
+          },
+        });
       });
     });
-  });
+  } else {
+    loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
+      if (!window.CCEverywhere) {
+        return;
+      }
+      if (!ccEverywhere) {
+        let env = 'preprod';
+        ccEverywhere = await window.CCEverywhere.initialize({
+          clientId: 'b20f1d10b99b4ad892a856478f87cec3',
+          appName: 'express',
+        }, {
+          loginMode: 'delayed',
+          env,
+        });
+      }
+  
+      const exportOptions = [
+        {
+          target: 'Download',
+          id: 'download-button',
+          optionType: 'button',
+          buttonType: 'native',
+        },
+        {
+          target: 'Editor',
+          id: 'edit-in-express',
+          buttonType: 'native',
+          optionType: 'button',
+        },
+      ];
+        ccEverywhere.openQuickAction({
+          id: qaname,
+          inputParams: {
+            asset: {
+              data: base64String,
+              dataType: 'base64',
+              type: 'image',
+            },
+            exportOptions,
+          },
+          modalParams: {
+            parentElementId: `cceverywherediv-${qaname}`,
+            minSize: {
+                width: 500,
+                height: 500,
+                unit: 'px',
+            },
+            padding: 0,
+            backgroundColor: 'white',
+          },
+        });
+      });
+  }
 }
