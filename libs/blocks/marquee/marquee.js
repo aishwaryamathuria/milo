@@ -3,7 +3,6 @@
  */
 
 var ccEverywhere;
-var wfinprogress = false;
 import { decorateButtons, getBlockSize, decorateBlockBg } from '../../utils/decorate.js';
 import { createTag, getConfig, loadStyle } from '../../utils/utils.js';
 import { loadScript } from '../../utils/utils.js';
@@ -134,13 +133,9 @@ export default async function init(el) {
   if (el.classList.contains('mnemonic-list') && foreground) {
     await loadMnemonicList(foreground);
   }
+
   el.querySelector('.foreground .asset').innerHTML = '';
-  
-  if (wfinprogress) {
-    setTimeout(addtoIframe(el), 2000);
-  } else {
-    addtoIframe(el);
-  }
+  addtoIframe(el);
 
   const inputSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="10" stroke="#fff"/>
@@ -190,7 +185,6 @@ async function fetchAndConvertToBase64(url, callback) {
 
 
 export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
-  wfinprogress = true;
   let qaname = '';
   const regex = 
   [...el.classList].forEach((cn) => { 
@@ -296,5 +290,4 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
         });
       });
   }
-  wfinprogress = false;
 }
