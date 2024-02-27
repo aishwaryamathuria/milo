@@ -2,6 +2,7 @@
  * Marquee - v6.0
  */
 
+var ccEverywhere;
 import { decorateButtons, getBlockSize, decorateBlockBg } from '../../utils/decorate.js';
 import { createTag, getConfig, loadStyle } from '../../utils/utils.js';
 import { loadScript } from '../../utils/utils.js';
@@ -183,7 +184,6 @@ async function fetchAndConvertToBase64(url, callback) {
 
 
 export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
-  let ccEverywhere;
   let qaname = '';
   const regex = 
   [...el.classList].forEach((cn) => { 
@@ -201,7 +201,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!window.CCEverywhere) {
         return;
       }
-      if (!ccEverywhere && !window.CCEverywhere) {
+      if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
           clientId: 'b20f1d10b99b4ad892a856478f87cec3',
@@ -210,10 +210,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           loginMode: 'delayed',
           env,
         });
-      } else if (!ccEverywhere && window.CCEverywhere) {
-        ccEverywhere = window.CCEverywhere.initialize
       }
-  
       const exportOptions = [
         {
           target: 'Download',
