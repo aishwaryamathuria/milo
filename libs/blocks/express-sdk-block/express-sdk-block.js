@@ -70,7 +70,7 @@ fetchAndConvertToBase64(imageUrl, base64String => {
           exportOptions,
         },
         modalParams: {
-          parentElementId: '#cceverywherediv',
+          parentElementId: document.querySelector('#cceverywherediv');
           // backgroundColor: 'rgba(0, 0, 0, 0.25)',
         },
       });
