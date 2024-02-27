@@ -245,6 +245,9 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
     });
   } else {
     loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
+      if (window.CCEverywhere) {
+        window.CCEverywhere.terminate();
+      }
       if (!window.CCEverywhere) {
         return;
       }
