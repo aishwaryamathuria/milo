@@ -219,13 +219,6 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           optionType: 'button',
           buttonType: 'native',
         },
-        {
-          target: 'Host',
-          id: 'my-custom-tryit',
-          label: 'Try it!!',
-          optionType: 'button',
-          buttonType: 'custom'
-        },
       ];
         ccEverywhere.openQuickAction({
           id: qaname,
@@ -247,16 +240,6 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
             padding: 0,
             backgroundColor: 'white',
           },     
-          callbacks: {
-            onLoad: () => { console.log('mathuria', document)},
-            onPublish: (publishParams) => {
-              // Handle custom export button behavior here
-              if(publishParams.exportButtonId=="my-custom-tryit") {
-                var event = new Event("click");
-                document.querySelector('#file-input-label').dispatchEvent(event);
-              }
-            },
-          }
         });
       });
     });
@@ -304,10 +287,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
             },
             padding: 0,
             backgroundColor: 'white',
-          },        
-          callbacks: {
-            onLoad: () => { console.log('mathuria', document)},
-          }
+          },       
         });
       });
   }
