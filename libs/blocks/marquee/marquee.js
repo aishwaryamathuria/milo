@@ -4,6 +4,7 @@
 
 import { decorateButtons, getBlockSize, decorateBlockBg } from '../../utils/decorate.js';
 import { createTag, getConfig, loadStyle } from '../../utils/utils.js';
+import { loadScript } from '../../utils/utils.js';
 
 // [headingSize, bodySize, detailSize]
 const blockTypeSizes = {
@@ -131,4 +132,92 @@ export default async function init(el) {
   if (el.classList.contains('mnemonic-list') && foreground) {
     await loadMnemonicList(foreground);
   }
+  addtoIframe();
+}
+
+
+async function fetchAndConvertToBase64(url, callback) {
+  try {
+      const response = await fetch(url);
+      if (!response.ok) {
+          throw new Error('Failed to fetch image');
+      }
+      const blob = await response.blob();
+      
+      const base64String = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              resolve(reader.result);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+      });
+
+      callback(base64String);
+  } catch (error) {
+      console.error('Error:', error);
+  }
+}
+
+
+export default function addtoIframe(el) {
+  let ccEverywhere;
+  const qaname = 'crop-image';
+  el.querySelector('.asset').id = 'cceverywherediv';
+  // el.querySelector('.asset').innerHTML += `<div id='cceverywherediv-${qaname}' class='cceverywherediv'></div>`;
+  const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
+  fetchAndConvertToBase64(imageUrl, base64String => {
+    // console.log('Base64 string:', base64String);
+    loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
+    if (!window.CCEverywhere) {
+      return;
+    }
+    if (!ccEverywhere) {
+      let env = 'preprod';
+      ccEverywhere = await window.CCEverywhere.initialize({
+        clientId: 'b20f1d10b99b4ad892a856478f87cec3',
+        appName: 'express',
+      }, {
+        loginMode: 'delayed',
+        env,
+      });
+    }
+
+    const exportOptions = [
+      {
+        target: 'Download',
+        id: 'download-button',
+        optionType: 'button',
+        buttonType: 'native',
+      },
+      {
+        target: 'Editor',
+        id: 'edit-in-express',
+        buttonType: 'native',
+        optionType: 'button',
+      },
+    ];
+      ccEverywhere.openQuickAction({
+        id: qaname,
+        inputParams: {
+          asset: {
+            data: base64String,
+            dataType: 'base64',
+            type: 'image',
+          },
+          exportOptions,
+        },
+        modalParams: {
+          parentElementId: `cceverywherediv`,
+          minSize: {
+              width: 500,
+              height: 500,
+              unit: 'px',
+          },
+          padding: 0,
+          backgroundColor: 'white',
+        },
+      });
+    });
+  });
 }
