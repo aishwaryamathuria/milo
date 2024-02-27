@@ -71,8 +71,7 @@ fetchAndConvertToBase64(imageUrl, base64String => {
         },
         modalParams: {
           parentElementId: 'cceverywherediv',
-          width: 0,
-          height: 0,
+          size: { width: 500, height: 500 }
           // backgroundColor: 'rgba(0, 0, 0, 0.25)',
         },
       });
