@@ -3,6 +3,7 @@
  */
 
 var ccEverywhere;
+const ccobj = {};
 import { decorateButtons, getBlockSize, decorateBlockBg } from '../../utils/decorate.js';
 import { createTag, getConfig, loadStyle } from '../../utils/utils.js';
 import { loadScript } from '../../utils/utils.js';
@@ -134,7 +135,7 @@ export default async function init(el) {
     await loadMnemonicList(foreground);
   }
 
-  el.querySelector('.foreground .asset').innerHTML = '';
+  el.querySelector('.asset').innerHTML = '';
   addtoIframe(el);
 
   const inputSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -194,7 +195,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
     }
   });
   // const qaname = 'crop-image';
-  el.querySelector('.foreground .asset').id = `cceverywherediv-${qaname}`;
+  el.querySelector('.asset').id = `cceverywherediv-${qaname}`;
   if (fetchAndConvert) {
     const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
     fetchAndConvertToBase64(imageUrl, base64String => {
