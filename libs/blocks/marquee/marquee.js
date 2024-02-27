@@ -172,7 +172,7 @@ export function addtoIframe(el) {
     }
   });
   // const qaname = 'crop-image';
-  el.querySelector('.foreground .asset').id = 'cceverywherediv';
+  el.querySelector('.foreground .asset').id = `cceverywherediv-${qaname}`;
   // el.querySelector('.asset').innerHTML += `<div id='cceverywherediv-${qaname}' class='cceverywherediv'></div>`;
   const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
   fetchAndConvertToBase64(imageUrl, base64String => {
@@ -217,7 +217,7 @@ export function addtoIframe(el) {
           exportOptions,
         },
         modalParams: {
-          parentElementId: `cceverywherediv`,
+          parentElementId: `cceverywherediv-${qaname}`,
           minSize: {
               width: 500,
               height: 500,
