@@ -145,14 +145,16 @@ export default async function init(el) {
   el.querySelector('.action-area').innerHTML = `<label id="file-input-label" for="file-input">${inputSvg} Select a File</label><input type='file' class='upload-file' id="file-input" name="file-input" />`;
   el.querySelector('.action-area #file-input-label').className = el.querySelector('.action-area #file-input-label').className + ' con-button blue button-xl button-justified-mobile';
   el.querySelector('.action-area .upload-file').addEventListener('change', (e) => {
-    var file = e.target.files[0];
+    const file = e.target.files[0];
     if (!file) {
         console.error('No file selected');
         return;
     }
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = function(e) {
-      var base64String = e.target.result;
+      const base64String = e.target.result;
+      const decoder = new TextDecoder('utf-8');
+      decoder.decode(e.target.result);
       addtoIframe(el, false, base64String);
     };
     reader.readAsArrayBuffer(file);
