@@ -159,8 +159,8 @@ export default async function init(el) {
     reader.onload = function(e) {
       var blob = new Blob([e.target.result], { type: file.type });
       document.querySelector('.marquee iframe').src = "https://quick-actions.projectx.corp.adobe.com/crop-image";
-      setTimeout(() => document.querySelector('.marquee iframe').contentWindow.postMessage({'blob': blob}, '*'), 800);
       setTimeout(() => document.querySelector('.marquee iframe').contentWindow.postMessage({'blob': blob}, '*'), 1000);
+      setTimeout(() => document.querySelector('.marquee iframe').contentWindow.postMessage({'blob': blob}, '*'), 1200);
     };
     reader.readAsArrayBuffer(file);
   });
