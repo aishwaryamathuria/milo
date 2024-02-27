@@ -1513,11 +1513,9 @@ function xxx() {
     Object.defineProperty(dropEvent, 'dataTransfer', {
       value: dataTransfer
     });
-
-    t = true;
-    // ENSURE TO CHECK UPLOADELEMENT
     var uploadElement = document.body.querySelector('qa-standalone-app').shadowRoot.querySelector('standalone-quick-action').shadowRoot.querySelector('qa-app-root').querySelector('qa-app').querySelector('qa-crop-image-editor').shadowRoot.querySelector('qa-workspace').querySelector('qa-file-upload').shadowRoot.querySelector('sp-dropzone');
     uploadElement.dispatchEvent(dropEvent);
+    t = true;
     console.log('mathuria', uploadElement);
   })
   .catch(error => console.error('mathuria Error fetching image:', error));
@@ -1537,8 +1535,8 @@ function yyy(imageBlob) {
   Object.defineProperty(dropEvent, 'dataTransfer', {
     value: dataTransfer
   });
-  mm = true;
   var uploadElement = document.body.querySelector('qa-standalone-app').shadowRoot.querySelector('standalone-quick-action').shadowRoot.querySelector('qa-app-root').querySelector('qa-app').querySelector('qa-crop-image-editor').shadowRoot.querySelector('qa-workspace').querySelector('qa-file-upload').shadowRoot.querySelector('sp-dropzone');
   uploadElement.dispatchEvent(dropEvent);
+  mm = true;
   console.log('mathuria', uploadElement);
 }
