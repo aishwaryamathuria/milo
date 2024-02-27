@@ -59,6 +59,7 @@ fetchAndConvertToBase64(imageUrl, base64String => {
         optionType: 'button',
       },
     ];
+    const parentElementId = await ccEverywhere.createCCXModal();
       ccEverywhere.openQuickAction({
         id: 'crop-image',
         inputParams: {
@@ -70,7 +71,7 @@ fetchAndConvertToBase64(imageUrl, base64String => {
           exportOptions,
         },
         modalParams: {
-          parentElementId: document.querySelector('#cceverywherediv')
+          parentElementId,
           // backgroundColor: 'rgba(0, 0, 0, 0.25)',
         },
       });
