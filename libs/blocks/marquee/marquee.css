@@ -754,3 +754,7 @@
   gap: 8px;
   cursor: pointer;
 }
+
+.marquee .asset.image {
+  height: 700px;
+}
