@@ -131,4 +131,36 @@ export default async function init(el) {
   if (el.classList.contains('mnemonic-list') && foreground) {
     await loadMnemonicList(foreground);
   }
+
+  //---- Working ----//
+  // el.querySelector('.con-button').addEventListener('click', (e) => {
+  //   e.preventDefault();
+  //   e.target.closest('.marquee').querySelector('iframe').src = "https://quick-actions.projectx.corp.adobe.com/crop-image";
+  // });
+  el.querySelector('.asset.image').innerHTML = `<iframe src="https://quick-actions.projectx.corp.adobe.com/crop-image?imgUrl=https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg"></iframe>`;
+  
+  //---- Working ----//
+
+  const inputSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" stroke="#fff"/>
+    <polyline points="16 12 12 8 8 12" stroke="#fff"/>
+    <line stroke="#fff" x1="12" y1="16" x2="12" y2="8"/>
+  </svg>`;
+  el.querySelector('.action-area').innerHTML += `<label id="file-input-label" for="file-input">${inputSvg} Select a File</label><input type='file' class='upload-file' id="file-input" name="file-input" />`;
+  
+  el.querySelector('.action-area #file-input-label').className = el.querySelector('.action-area #file-input-label').className + ' blue ' + el.querySelector('.action-area .con-button').className;
+  el.querySelector('.action-area .upload-file').addEventListener('change', (e) => {
+    var file = e.target.files[0];
+    if (!file) {
+        console.error('No file selected');
+        return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var blob = new Blob([e.target.result], { type: file.type });
+      document.querySelector('.marquee iframe').src = "https://quick-actions.projectx.corp.adobe.com/crop-image";
+      setTimeout(() => document.querySelector('.marquee iframe').contentWindow.postMessage({'blob': blob}, '*'), 1000);
+    };
+    reader.readAsArrayBuffer(file);
+  });
 }

@@ -95,10 +95,18 @@
 }
 
 .marquee .asset img,
-.marquee .asset video {
+.marquee .asset video,
+.marquee .asset iframe {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.marquee .asset iframe {
+  width: 100%;
+  height: 500px;
+  border: 0px;
+  border-radius: 20px;
 }
 
 .marquee .icon-area {
@@ -727,4 +735,26 @@
 .static-links .marquee a:not(.con-button),
 .static-links .marquee a:not(.con-button):hover {
   color: inherit;
+}
+
+.marquee .upload-file {
+  opacity: 0;
+}
+
+.marquee .upload-file::file-selector-button {
+  display: none; 
+}
+
+.marquee .upload-file::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+} 
+
+.marquee #file-input-label {
+  opacity: 1;
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
 }
