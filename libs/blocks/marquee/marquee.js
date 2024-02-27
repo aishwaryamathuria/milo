@@ -289,7 +289,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
             backgroundColor: 'white',
           },        
           callbacks: {
-            onLoad: () => { console.log('mathuria', document.querySelector('x-embed-header-bar'))},
+            onLoad: () => { console.log('mathuria', document)},
           }
         });
       });
