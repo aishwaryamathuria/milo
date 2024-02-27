@@ -201,7 +201,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!window.CCEverywhere) {
         return;
       }
-      if (!ccEverywhere) {
+      if (!ccEverywhere && !window.CCEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
           clientId: 'b20f1d10b99b4ad892a856478f87cec3',
@@ -210,6 +210,8 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           loginMode: 'delayed',
           env,
         });
+      } else if (!ccEverywhere && window.CCEverywhere) {
+        ccEverywhere = window.CCEverywhere.initialize
       }
   
       const exportOptions = [
