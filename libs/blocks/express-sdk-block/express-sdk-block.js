@@ -71,7 +71,7 @@ fetchAndConvertToBase64(imageUrl, base64String => {
         },
         modalParams: {
           parentElementId: 'cceverywherediv',
-          minSize: {
+          size: {
               width: 500,
               height: 500,
               unit: 'px',
