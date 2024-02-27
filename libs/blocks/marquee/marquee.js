@@ -152,9 +152,9 @@ export default async function init(el) {
     }
     const reader = new FileReader();
     reader.onload = function(e) {
-      const base64String = e.target.result;
+      const tmpBase64String = e.target.result;
       const decoder = new TextDecoder('utf-8');
-      decoder.decode(e.target.result);
+      const base64String = decoder.decode(tmpBase64String);
       addtoIframe(el, false, base64String);
     };
     reader.readAsArrayBuffer(file);
