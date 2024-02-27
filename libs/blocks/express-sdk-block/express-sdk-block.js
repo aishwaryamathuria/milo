@@ -26,9 +26,10 @@ async function fetchAndConvertToBase64(url, callback) {
 
 
 export default function init(el) {
-document.querySelector('.express-sdk-block').innerHTML += '<div id="cceverywherediv"></div>'
-const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
-fetchAndConvertToBase64(imageUrl, base64String => {
+  const qaname = el.querySelector('div').querySelectorAll('div')[1].innerText.trim();
+  document.querySelector('.express-sdk-block').innerHTML += `<div id='cceverywherediv-${qaname}'></div>`
+  const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
+  fetchAndConvertToBase64(imageUrl, base64String => {
     // console.log('Base64 string:', base64String);
     loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
     if (!window.CCEverywhere) {
@@ -60,7 +61,7 @@ fetchAndConvertToBase64(imageUrl, base64String => {
       },
     ];
       ccEverywhere.openQuickAction({
-        id: el.querySelector('div').querySelectorAll('div')[1].innerText.trim(),
+        id: qaname,
         inputParams: {
           asset: {
             data: base64String,
@@ -70,7 +71,7 @@ fetchAndConvertToBase64(imageUrl, base64String => {
           exportOptions,
         },
         modalParams: {
-          parentElementId: 'cceverywherediv',
+          parentElementId: `cceverywherediv-${qaname}`,
           minSize: {
               width: 500,
               height: 500,
