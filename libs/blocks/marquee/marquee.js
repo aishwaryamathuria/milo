@@ -232,7 +232,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           },
           modalParams: {
             parentElementId: `cceverywherediv-${qaname}`,
-            minSize: {
+            size: {
                 width: 600,
                 height: 600,
                 unit: 'px',
