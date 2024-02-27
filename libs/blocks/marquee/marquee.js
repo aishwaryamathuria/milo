@@ -163,7 +163,15 @@ async function fetchAndConvertToBase64(url, callback) {
 
 export function addtoIframe(el) {
   let ccEverywhere;
-  const qaname = 'crop-image';
+  let qaname = '';
+  const regex = 
+  [...el.classList].forEach((cn) => { 
+    if(cn.match(/\bqa-\w+/)) {
+      qaname = cn.replace('qa-', '');
+      console.log(cn, qaname);
+    }
+  });
+  // const qaname = 'crop-image';
   el.querySelector('.foreground .asset').id = 'cceverywherediv';
   // el.querySelector('.asset').innerHTML += `<div id='cceverywherediv-${qaname}' class='cceverywherediv'></div>`;
   const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
