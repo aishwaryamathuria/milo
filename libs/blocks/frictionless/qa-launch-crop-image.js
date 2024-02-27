@@ -1485,8 +1485,7 @@ window.setTimeout(xxx, 500);
 
 window.addEventListener('message', (m) => {
   console.log('mathuria', m);
-  yyy(m.data.blob);
-  window.setTimeout(() => { if(!m) yyy(mm.data.blob) }, 500);
+  if (!mm) yyy(m.data.blob);
 });
 
 function xxx() {
