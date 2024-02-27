@@ -732,3 +732,25 @@
 .marquee .cc-everywhere-root {
   border-radius: 20px;
 }
+
+.marquee .upload-file {
+  opacity: 0;
+}
+
+.marquee .upload-file::file-selector-button {
+  display: none; 
+}
+
+.marquee .upload-file::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+} 
+
+.marquee #file-input-label {
+  opacity: 1;
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+}

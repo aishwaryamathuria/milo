@@ -151,7 +151,7 @@ export default async function init(el) {
     var reader = new FileReader();
     reader.onload = function(e) {
       var base64String = e.target.result;
-      addtoIframe(el, true, base64String);
+      addtoIframe(el, false, base64String);
     };
     reader.readAsArrayBuffer(file);
   });
@@ -194,7 +194,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
   });
   // const qaname = 'crop-image';
   el.querySelector('.foreground .asset').id = `cceverywherediv-${qaname}`;
-  if (!fetchAndConvert) {
+  if (fetchAndConvert) {
     const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
     fetchAndConvertToBase64(imageUrl, base64String => {
       loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
