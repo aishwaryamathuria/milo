@@ -60,7 +60,7 @@ fetchAndConvertToBase64(imageUrl, base64String => {
       },
     ];
       ccEverywhere.openQuickAction({
-        id: 'crop-image',
+        id: el.querySelector('div').querySelectorAll('div')[1].innerText.trim(),
         inputParams: {
           asset: {
             data: base64String,
