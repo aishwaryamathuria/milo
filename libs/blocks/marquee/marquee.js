@@ -152,12 +152,10 @@ export default async function init(el) {
     }
     const reader = new FileReader();
     reader.onload = function(e) {
-      const tmpBase64String = e.target.result;
-      const decoder = new TextDecoder('utf-8');
-      const base64String = decoder.decode(tmpBase64String);
+      const base64String = e.target.result;
       addtoIframe(el, false, base64String);
     };
-    reader.readAsArrayBuffer(file);
+    reader.readAsDataURL(file);
   });
 }
 
