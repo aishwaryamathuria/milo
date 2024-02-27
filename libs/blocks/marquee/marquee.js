@@ -233,11 +233,6 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           },
           modalParams: {
             parentElementId: `cceverywherediv-${qaname}`,
-            size: {
-                width: 600,
-                height: 600,
-                unit: 'px',
-            },
             minSize: {
                 width: 500,
                 height: 500,
@@ -286,11 +281,6 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           },
           modalParams: {
             parentElementId: `cceverywherediv-${qaname}`,
-            size: {
-                width: 800,
-                height: 600,
-                unit: 'px',
-            },
             minSize: {
                 width: 500,
                 height: 500,
