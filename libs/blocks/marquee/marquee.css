@@ -728,3 +728,7 @@
 .static-links .marquee a:not(.con-button):hover {
   color: inherit;
 }
+
+.marquee .asset {
+  border-radius: 20px;
+}
