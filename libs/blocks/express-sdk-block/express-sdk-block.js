@@ -27,7 +27,7 @@ async function fetchAndConvertToBase64(url, callback) {
 
 export default function init(el) {
   const qaname = el.querySelector('div').querySelectorAll('div')[1].innerText.trim();
-  document.querySelector('.express-sdk-block').innerHTML += `<div id='cceverywherediv-${qaname}'></div>`
+  document.querySelector('.express-sdk-block').innerHTML += `<div id='cceverywherediv-${qaname}' class='cceverywherediv'></div>`;
   const imageUrl = 'https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg';
   fetchAndConvertToBase64(imageUrl, base64String => {
     // console.log('Base64 string:', base64String);
