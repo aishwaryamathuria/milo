@@ -133,6 +133,7 @@ export default async function init(el) {
     await loadMnemonicList(foreground);
   }
   addtoIframe(el);
+  el.querySelector('.foreground .asset').innerHTML = '';
 }
 
 
