@@ -76,7 +76,8 @@ fetchAndConvertToBase64(imageUrl, base64String => {
               height: 500,
               unit: 'px',
           },
-          padding: 0
+          padding: 0,
+          backgroundColor: 'white',
         },
       });
     });
