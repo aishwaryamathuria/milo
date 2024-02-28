@@ -29,14 +29,14 @@
 
 @media (max-width: 600px) {
   .dialog-modal.commerce-frame .milo-iframe {
-    padding-bottom: 100%;
+    padding-bottom: 120%;
   }
 }
 
 @media (max-width: 1199px) {
   .dialog-modal.commerce-frame .milo-iframe {
     /* fallback to vh if dvh is not supported */
-    padding-bottom: 50%;
+    padding-bottom: 55%;
   }
 }
 
