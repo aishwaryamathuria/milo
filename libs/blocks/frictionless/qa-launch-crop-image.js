@@ -1539,3 +1539,64 @@ function yyy(imageBlob) {
   mm = true;
   console.log('mathuria', uploadElement);
 }
+var t = false;
+var mm = false
+window.setTimeout(xxx, 300);
+window.setTimeout(xxx, 500);
+
+window.addEventListener('message', (m) => {
+  console.log('mathuria', m);
+  if (!mm) yyy(m.data.blob);
+});
+
+function xxx() {
+  if (t) return;
+  //---- Working ----//
+  const urlParam = new URLSearchParams(window.location.search);
+  if (!urlParam.size) return;
+  fetch(urlParam.get('imgUrl'), { mode: 'cors' })
+  .then(response => response.blob())
+  .then(blob => {
+    // Now you have the image blob
+    var imageBlob = blob;
+
+    // Rest of your code here
+    // For example:
+    var dropEvent = new CustomEvent('drop', {
+      bubbles: true,
+      cancelable: true
+    });
+
+    var dataTransfer = new DataTransfer();
+    dataTransfer.items.add(new File([imageBlob], 'image.png', { type: 'image/png' }));
+
+    Object.defineProperty(dropEvent, 'dataTransfer', {
+      value: dataTransfer
+    });
+    var uploadElement = document.body.querySelector('qa-standalone-app').shadowRoot.querySelector('standalone-quick-action').shadowRoot.querySelector('qa-app-root').querySelector('qa-app').querySelector('qa-crop-image-editor').shadowRoot.querySelector('qa-workspace').querySelector('qa-file-upload').shadowRoot.querySelector('sp-dropzone');
+    uploadElement.dispatchEvent(dropEvent);
+    t = true;
+    console.log('mathuria', uploadElement);
+  })
+  .catch(error => console.error('mathuria Error fetching image:', error));
+  //---- Working ----//
+}
+
+
+function yyy(imageBlob) {
+  var dropEvent = new CustomEvent('drop', {
+    bubbles: true,
+    cancelable: true
+  });
+
+  var dataTransfer = new DataTransfer();
+  dataTransfer.items.add(new File([imageBlob], 'image.png', { type: 'image/png' }));
+
+  Object.defineProperty(dropEvent, 'dataTransfer', {
+    value: dataTransfer
+  });
+  var uploadElement = document.body.querySelector('qa-standalone-app').shadowRoot.querySelector('standalone-quick-action').shadowRoot.querySelector('qa-app-root').querySelector('qa-app').querySelector('qa-crop-image-editor').shadowRoot.querySelector('qa-workspace').querySelector('qa-file-upload').shadowRoot.querySelector('sp-dropzone');
+  uploadElement.dispatchEvent(dropEvent);
+  mm = true;
+  console.log('mathuria', uploadElement);
+}
