@@ -137,7 +137,7 @@ export default async function init(el) {
   //   e.preventDefault();
   //   e.target.closest('.marquee').querySelector('iframe').src = "https://quick-actions.projectx.corp.adobe.com/crop-image";
   // });
-  el.querySelector('.asset.image').innerHTML = `<iframe src="https://quick-actions.projectx.corp.adobe.com/crop-image"></iframe>`;
+  el.querySelector('.asset.image').innerHTML = `<iframe src="https://quick-actions.projectx.corp.adobe.com/crop-image?https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg"></iframe>`;
   
   //---- Working ----//
 
