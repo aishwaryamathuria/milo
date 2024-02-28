@@ -137,7 +137,7 @@ export default async function init(el) {
   //   e.preventDefault();
   //   e.target.closest('.marquee').querySelector('iframe').src = "https://quick-actions.projectx.corp.adobe.com/crop-image";
   // });
-  el.querySelector('.asset.image').innerHTML = `<iframe src="https://quick-actions.projectx.corp.adobe.com/crop-image?imgUrl=https://clio-assets.adobe.com/clio-playground/image-inspirations/v9/thumbnails1/3d_render_baby_parrot_adorable_362.jpg"></iframe>`;
+  el.querySelector('.asset.image').innerHTML = `<iframe src="https://quick-actions.projectx.corp.adobe.com/crop-image?imgUrl=https://www.adobe.com/products/media_1baf5f28c11764d3d0371833e833a7ce0e9dcc433.jpeg"></iframe>`;
   
   //---- Working ----//
 
