@@ -36,7 +36,7 @@
                     if (isWorker) {
                         as = "worker";
                     }
-                    return `${data}<link rel="preload" href="static/${fileName}" as="${as}" ${
+                    return `${data}<link rel="preload" href="${fileName}" as="${as}" ${
                         isWasm ? "crossorigin" : ""
                     }/>\n`;
                 }, "");
