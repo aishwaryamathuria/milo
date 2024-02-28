@@ -247,7 +247,7 @@ export const [hasActiveLink, setActiveLink, getActiveLink] = (() => {
 
       [`${origin}${pathname}`, pathname].forEach((path) => {
         if (activeLink) return;
-        activeLink = area.querySelector(`a[href = '${path}'], a[href ^= '${path}?'], a[href ^= '${path}#']`);
+        activeLink = area.querySelector(`a[href = '${path}'], a[href ^= '${path}?'], a[href ^= '${path}#'], a[href ^= '#']`);
       });
 
       if (!activeLink) return null;
