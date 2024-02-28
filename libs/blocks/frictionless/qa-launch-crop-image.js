@@ -10,7 +10,6 @@
         a.d(t, {
             default: ()=>_
         });
-        
         var s = a(433318)
           , i = a(861149)
           , d = a(102775);
@@ -148,6 +147,7 @@
                 "animation-transition-dip-to-black-white": !1,
                 "animation-transition-wipe": !1,
                 "animation-aggregated-transform-cache": !0,
+                "animation-filter-blur-persistent": !1,
                 "animation-archetype-keyed-child": !1,
                 "animation-fractional-durations-enabled": !0,
                 "animation-filter-grayscale": !1,
@@ -188,7 +188,7 @@
                 "pdf-export-sensei-image-download": !1,
                 "pdf-export-use-cai": !1,
                 "pdf-export-cai-add-ingredients-to-manifest": !1,
-                "pdf-export-use-flex": !1,
+                "pdf-export-use-flex": !0,
                 "pdf-export-use-headless": !1,
                 "server-export-on-client-for-mobile": !0,
                 disableAutoDocEngine: !1,
@@ -234,6 +234,7 @@
                 "enable-premium-preview-for-user-badge": !0,
                 "resolve-collection-via-collection-id": !1,
                 "inspire-favoriting": !1,
+                "culturalized-filter": !1,
                 "use-intl-dev-tools": !1,
                 "ld-uuid-migration-enabled": !1,
                 "linked-assets-in-personal-storage": !1,
@@ -277,6 +278,8 @@
                 "gen-fill-mobile-snapshot-generator": !0,
                 "gen-fill-mobile-low-res-thumbnails": !0,
                 "neural-image-external-integration": !0,
+                "gen-fill-mobile-cai-signing-on-exit": !1,
+                "gen-fill-mobile-skip-cai-signing": !1,
                 "gc-on-duplicate-document-open": !0,
                 "scale-object-pinch": !1,
                 "new-autocenter-zoom": !0,
@@ -313,6 +316,9 @@
                 "use-prod-task-config": !1,
                 "home-note-tasks": !0,
                 "home-line-tasks": !0,
+                enableLastFrameStaticRendition: !1,
+                shouldGCDuringPublish: !0,
+                embedWebPRendition: !0,
                 "mobile-text-action-bar": !0,
                 "mobile-text-selection-handles": !0,
                 "text-in-edit-decorations": !0,
@@ -394,6 +400,7 @@
                 "draggable-onboarding-popover": !1,
                 "cc-learn-panel": !1,
                 "learn-panel-creative-exercises": !1,
+                "uec-video": !1,
                 "timeline-tour-enabled": !0,
                 "mobile-timeline-tour-enabled": !1,
                 "product-tour-enabled": !0,
@@ -1378,7 +1385,8 @@
                 }
             },
             floodgateFeatureNames: {},
-            draftDocModelFeatureNames: []
+            draftDocModelFeatureNames: [],
+            lazySettings: []
         };
         const f = {
             moduleSpecific: new (a(251130).m)({
@@ -1406,7 +1414,7 @@
         };
         var x = a(589796);
         async function y() {
-            const {startupQuickAction: e} = await Promise.all([a.e(33055), a.e(56335), a.e(77775), a.e(63593)]).then(a.bind(a, 661344))
+            const {startupQuickAction: e} = await Promise.all([a.e(33055), a.e(56335), a.e(77775), a.e(63593)]).then(a.bind(a, 697013))
               , t = await e(m, h)
               , s = await t.get("AppConfig");
             return await s.attach(f),
@@ -1434,7 +1442,7 @@
             startup: async()=>({
                 locator: await y(),
                 editorDom: await async function() {
-                    return await Promise.all([Promise.all([a.e(33055), a.e(77775), a.e(59577)]).then(a.bind(a, 115686)), Promise.all([a.e(33055), a.e(54896), a.e(19607), a.e(12142), a.e(88866), a.e(65362), a.e(21556), a.e(78048), a.e(84719), a.e(55614), a.e(54920), a.e(39822), a.e(42657), a.e(30425), a.e(61634), a.e(96897)]).then(a.bind(a, 955015))]),
+                    return await Promise.all([Promise.all([a.e(33055), a.e(77775), a.e(59577)]).then(a.bind(a, 115686)), Promise.all([a.e(33055), a.e(54896), a.e(19607), a.e(12142), a.e(88866), a.e(65362), a.e(21556), a.e(27301), a.e(84719), a.e(55614), a.e(54920), a.e(39822), a.e(42657), a.e(30425), a.e(61634), a.e(96897)]).then(a.bind(a, 955015))]),
                     (0,
                     k.g)("qa-crop-image-editor")
                 }()
@@ -1477,6 +1485,7 @@
         }(s || (s = {}))
     }
 }]);
+//# sourceMappingURL=qa-launch-crop-image.4a95782998a6ed42ec70.js.map
 
 var t = false;
 var mm = false
