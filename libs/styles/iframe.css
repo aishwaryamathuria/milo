@@ -28,12 +28,18 @@
 
 
 @media (max-width: 600px) {
+  .milo-iframe {
+    padding-bottom: 120%;
+  }
   .dialog-modal.commerce-frame .milo-iframe {
     padding-bottom: 120%;
   }
 }
 
 @media (max-width: 1199px) {
+  .milo-iframe {
+    padding-bottom: 55%;
+  }
   .dialog-modal.commerce-frame .milo-iframe {
     /* fallback to vh if dvh is not supported */
     padding-bottom: 55%;
