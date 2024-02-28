@@ -1550,8 +1550,7 @@ function yyy(imageBlob) {
 }
 var t = false;
 var mm = false
-window.setTimeout(xxx, 300);
-window.setTimeout(xxx, 500);
+window.setTimeout(xxx, 1000);
 
 window.addEventListener('message', (m) => {
   console.log('mathuria', m);
