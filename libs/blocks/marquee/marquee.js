@@ -206,10 +206,9 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
-          clientId: '9c87596521804dc1a52cd8508b585146',
+          clientId: 'bdc3513d3eda45c885ba846815f2a951',
           appName: 'ExpressEmbedDemoApplication',
           platformCategory: "web",
-          redirectUri: "https://demo-stage.expressembed.com/"
         }, {
           loginMode: 'delayed',
           env,
@@ -255,7 +254,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
-          clientId: '9c87596521804dc1a52cd8508b585146',
+          clientId: 'bdc3513d3eda45c885ba846815f2a951',
           appName: 'ExpressEmbedDemoApplication',
         }, {
           loginMode: 'delayed',
