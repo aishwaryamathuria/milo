@@ -206,9 +206,6 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
-          clientId: '18f2f1f7eb3e4b1d952ecaa05322f5dd',
-          appName: 'cc',
-          platformCategory: "web"
         }, {
           loginMode: 'delayed',
           env,
@@ -254,8 +251,6 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
-          clientId: '18f2f1f7eb3e4b1d952ecaa05322f5dd',
-          appName: 'cc',
         }, {
           loginMode: 'delayed',
           env,
