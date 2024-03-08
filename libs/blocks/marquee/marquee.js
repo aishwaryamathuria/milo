@@ -208,6 +208,8 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
         ccEverywhere = await window.CCEverywhere.initialize({
           clientId: '9c87596521804dc1a52cd8508b585146',
           appName: 'ExpressEmbedDemoApplication',
+          platformCategory: "web",
+          redirectUri: "https://demo-stage.expressembed.com/"
         }, {
           loginMode: 'delayed',
           env,
