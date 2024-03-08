@@ -253,8 +253,8 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
-          clientId: 'b20f1d10b99b4ad892a856478f87cec3',
-          appName: 'express',
+          clientId: '7fecaab334c34daebe32d52c9c454ab1',
+          appName: 'Blazon App',
         }, {
           loginMode: 'delayed',
           env,
