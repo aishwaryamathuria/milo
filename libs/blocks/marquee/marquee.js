@@ -254,8 +254,8 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
-          clientId: 'guid',
-          appName: 'guid',
+          clientId: 'b20f1d10b99b4ad892a856478f87cec3',
+          appName: 'express',
         }, {
           loginMode: 'delayed',
           env,
