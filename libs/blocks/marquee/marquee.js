@@ -206,6 +206,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
+          clientId: 'guid',
           appName: 'cc',
         }, {
           loginMode: 'delayed',
@@ -252,6 +253,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
       if (!ccEverywhere) {
         let env = 'preprod';
         ccEverywhere = await window.CCEverywhere.initialize({
+          clientId: 'guid',
           appName: 'cc',
         }, {
           loginMode: 'delayed',
