@@ -756,8 +756,9 @@
   cursor: pointer;
 }
 
-.marquee .asset.image {
+.marquee .asset {
   height: 650px;
+  min-height: 650px;
 }
 
 .cc-everywhere-iframe-close-button {
