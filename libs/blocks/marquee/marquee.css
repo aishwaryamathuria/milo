@@ -761,6 +761,10 @@
   min-height: 650px;
 }
 
+.marquee .asset iframe {
+  min-height: 550px;
+}
+
 .cc-everywhere-iframe-close-button {
   display: none;
 }
