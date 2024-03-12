@@ -156,6 +156,7 @@ export default async function init(el) {
     const reader = new FileReader();
     reader.onload = function(e) {
       const base64String = e.target.result;
+      el.querySelector('.asset').innerHTML = '';
       addtoIframe(el, false, base64String);
     };
     reader.readAsDataURL(file);
