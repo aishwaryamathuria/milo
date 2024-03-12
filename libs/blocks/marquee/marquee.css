@@ -759,6 +759,7 @@
 .marquee .asset {
   height: 650px;
   min-height: 650px;
+  display: flex;
 }
 
 .marquee .asset iframe {
