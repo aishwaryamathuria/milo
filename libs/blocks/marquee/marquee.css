@@ -769,3 +769,20 @@
 .cc-everywhere-iframe-close-button {
   display: none;
 }
+
+.enticement-text {
+  display: none;
+  max-width: 30ch;
+  position: absolute;
+  font-size: 28px;
+  line-height: 35px;
+  margin: 40px 0 16px -20px;
+  top: -90px;
+  color: var(--color-white);
+}
+
+.enticement-arrow {
+  right: 575px;
+  top: -30px;
+  display: block;
+}
