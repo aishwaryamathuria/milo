@@ -3,7 +3,7 @@
  */
 
 import { decorateButtons, getBlockSize, decorateBlockBg } from '../../utils/decorate.js';
-import { createTag, getConfig, loadStyle } from '../../utils/utils.js';
+import { createTag, getConfig, loadStyle, loadScript } from '../../utils/utils.js';
 
 // [headingSize, bodySize, detailSize]
 const blockTypeSizes = {
@@ -131,4 +131,34 @@ export default async function init(el) {
   if (el.classList.contains('mnemonic-list') && foreground) {
     await loadMnemonicList(foreground);
   }
+  media.addEventListener('click', (e) => {
+    loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
+    if (!ccEverywhere) {
+      let env = 'preprod';
+      ccEverywhere = await window.CCEverywhere.initialize({
+        clientId: 'b20f1d10b99b4ad892a856478f87cec3',
+        appName: 'express',
+      }, {
+        loginMode: 'delayed',
+        env,
+      }, {}, 
+      window.authProvider,
+  )};
+
+    const exportOptions = [
+      {
+        target: 'Download',
+        id: 'download-button',
+        optionType: 'button',
+        buttonType: 'native',
+      },
+    ];
+      ccEverywhere.openQuickAction({
+        id: 'remove-background',
+        modalParams: {
+          backgroundColor: 'rgba(0, 0, 0, 0.25)',
+        },       
+      });
+    });
+  });
 }
