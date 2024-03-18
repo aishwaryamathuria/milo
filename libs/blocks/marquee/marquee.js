@@ -4,7 +4,7 @@
 
 import { decorateButtons, getBlockSize, decorateBlockBg } from '../../utils/decorate.js';
 import { createTag, getConfig, loadStyle, loadScript } from '../../utils/utils.js';
-
+var ccEverywhere;
 // [headingSize, bodySize, detailSize]
 const blockTypeSizes = {
   marquee: {
