@@ -262,7 +262,7 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
           env,
         }, {}, 
         window.authProvider,
-      }
+    )};
   
       const exportOptions = [
         {
