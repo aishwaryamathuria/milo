@@ -156,7 +156,7 @@ export default async function init(el) {
       },
     ];
       ccEverywhere.openQuickAction({
-        id: 'remove-background',
+        id: 'resize-image',
         modalParams: {
           backgroundColor: 'rgba(0, 0, 0, 0.25)',
         },       
