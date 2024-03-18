@@ -260,7 +260,8 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
         }, {
           loginMode: 'delayed',
           env,
-        });
+        }, {}, 
+        window.authProvider);
       }
   
       const exportOptions = [
