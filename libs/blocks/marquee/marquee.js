@@ -275,10 +275,22 @@ export function addtoIframe(el, fetchAndConvert=true, localBase64String='') {
         ccEverywhere.openQuickAction({
           id: qaname,
           inputParams: {
+            asset: {
+              data: localBase64String,
+              dataType: 'base64',
+              type: 'image',
+            },
             exportOptions,
           },
           modalParams: {
-            backgroundColor: 'rgba(0, 0, 0, 0.25)',
+            parentElementId: `cceverywherediv-${qaname}`,
+            minSize: {
+                width: 500,
+                height: 500,
+                unit: 'px',
+            },
+            padding: 0,
+            backgroundColor: 'white',
           },       
         });
       });
