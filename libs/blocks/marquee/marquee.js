@@ -131,7 +131,7 @@ export default async function init(el) {
   if (el.classList.contains('mnemonic-list') && foreground) {
     await loadMnemonicList(foreground);
   }
-  media.addEventListener('click', (e) => {
+  media.querySelector('video').addEventListener('click', (e) => {
     loadScript('https://sdk.cc-embed.adobe.com/v3/CCEverywhere.js').then(async () => {
     if (!ccEverywhere) {
       let env = 'preprod';
