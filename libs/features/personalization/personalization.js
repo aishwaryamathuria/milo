@@ -464,6 +464,17 @@ export const updateFragDataProps = (a, inline, sections, fragment) => {
 };
 
 export function handleCommands(commands, rootEl = document, forceInline = false) {
+  commands = [
+      {
+          "action": "replace",
+          "selector": ".hero-marquee",
+          "pageFilter": "",
+          "target": "https://main--cc--adobecom.hlx.page/cc-shared/fragments/products/photoshop/personalization/marquee/mobile-ctas",
+          "selectorType": "other",
+          "manifestId": false,
+          "targetManifestId": false
+      }
+  ];
   commands.forEach((cmd) => {
     const { manifestId, targetManifestId, action, selector, target: trgt } = cmd;
     const target = forceInline ? addHash(trgt, INLINE_HASH) : trgt;
