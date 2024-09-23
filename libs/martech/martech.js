@@ -27,7 +27,7 @@ const waitForEventOrTimeout = (eventName, timeout, returnValIfTimeout) => new Pr
     // eslint-disable-next-line no-use-before-define
     clearTimeout(timer);
     console.log(event.detail);
-    event.detail.decisions[0].items[0].data.content.manifestContent.experiences.data = [
+    event.detail.result.decisions[0].items[0].data.content.manifestContent.experiences.data = [
         {
             "action": "replace",
             "selector": ".hero-marquee",
