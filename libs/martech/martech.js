@@ -26,19 +26,6 @@ const waitForEventOrTimeout = (eventName, timeout, returnValIfTimeout) => new Pr
   const listener = (event) => {
     // eslint-disable-next-line no-use-before-define
     clearTimeout(timer);
-    console.log(event.detail);
-    event.detail.result.decisions[0].items[0].data.content.manifestContent.experiences.data = [
-        {
-            "action": "replace",
-            "selector": ".hero-marquee",
-            "pageFilter": "",
-            "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config",
-            "selectorType": "other",
-            "manifestId": false,
-            "targetManifestId": false
-        }
-    ];
-    event.detail.result.decisions[0].items[0].data.content.manifestContent.experiences.limit = 1;
     resolve(event.detail);
   };
 
