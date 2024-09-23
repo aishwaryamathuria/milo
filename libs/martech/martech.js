@@ -27,17 +27,18 @@ const waitForEventOrTimeout = (eventName, timeout, returnValIfTimeout) => new Pr
     // eslint-disable-next-line no-use-before-define
     clearTimeout(timer);
     console.log(event.detail);
-    // [
-  //     {
-  //         "action": "replace",
-  //         "selector": ".hero-marquee",
-  //         "pageFilter": "",
-  //         "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config",
-  //         "selectorType": "other",
-  //         "manifestId": false,
-  //         "targetManifestId": false
-  //     }
-  // ];
+    const x = event.detail;
+    x.result.decisions.data.content.manifestContent.experiences.data = [
+        {
+            "action": "replace",
+            "selector": ".hero-marquee",
+            "pageFilter": "",
+            "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config",
+            "selectorType": "other",
+            "manifestId": false,
+            "targetManifestId": false
+        }
+    ];
     resolve(event.detail);
   };
 
