@@ -469,7 +469,7 @@ export function handleCommands(commands, rootEl = document, forceInline = false)
           "action": "replace",
           "selector": ".hero-marquee",
           "pageFilter": "",
-          "target": "https://main--cc--adobecom.hlx.page/cc-shared/fragments/products/photoshop/personalization/marquee/mobile-ctas",
+          "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config",
           "selectorType": "other",
           "manifestId": false,
           "targetManifestId": false
