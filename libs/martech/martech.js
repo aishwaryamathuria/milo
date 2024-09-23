@@ -27,7 +27,7 @@ const waitForEventOrTimeout = (eventName, timeout, returnValIfTimeout) => new Pr
     // eslint-disable-next-line no-use-before-define
     clearTimeout(timer);
     console.log(event.detail);
-    [
+    // [
   //     {
   //         "action": "replace",
   //         "selector": ".hero-marquee",
