@@ -38,6 +38,7 @@ const waitForEventOrTimeout = (eventName, timeout, returnValIfTimeout) => new Pr
             "targetManifestId": false
         }
     ];
+    event.detail.result.decisions[0].items[0].data.content.manifestContent.experiences.limit = 1;
     resolve(event.detail);
   };
 
