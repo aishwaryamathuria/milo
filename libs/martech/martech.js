@@ -28,7 +28,7 @@ const waitForEventOrTimeout = (eventName, timeout, returnValIfTimeout) => new Pr
     clearTimeout(timer);
     console.log(event.detail);
     const x = event.detail;
-    x.result.decisions[0].items.data.content.manifestContent.experiences.data = [
+    x.result.decisions[0].items[0].data.content.manifestContent.experiences.data = [
         {
             "action": "replace",
             "selector": ".hero-marquee",
