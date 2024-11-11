@@ -80,6 +80,7 @@ const MILO_BLOCKS = [
   'table-metadata',
   'tags',
   'tag-selector',
+  'turing',
   'tiktok',
   'twitter',
   'video',
