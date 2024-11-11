@@ -27,7 +27,6 @@ const imgList = [];
 const imgTitle = [];
 imgJson._embedded.assets.forEach((i) => {
   let aw = i._embedded.artwork._links.rendition.href;
-  console.log(aw)
   aw = aw.replace("{format}", "png");
   aw = aw.replace("{dimension}", "width");
   aw = aw.replace("{size}", "400");
