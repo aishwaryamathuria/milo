@@ -34,7 +34,7 @@ imgJson._embedded.assets.forEach((i) => {
   imgTitle.push(i.title);
 });
 const x = document.querySelector(".carousel_items");
-for (let j = 0; j<=10; j++) {
+for (let j = 0; j<=50; j++) {
   imgList.forEach((img, i) => {
     x.innerHTML = x.innerHTML + `<div class="carousel_item item${i+1}"> <p class="carousel_text">${imgTitle[i]}</p> </div>`;
     const tmp = x.querySelector('div:last-child');
