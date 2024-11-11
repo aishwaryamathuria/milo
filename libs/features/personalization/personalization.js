@@ -477,7 +477,7 @@ export function handleCommands(commands, rootEl = document, forceInline = false)
               "targetManifestId": false
           }
       ];
-    } else if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.contains('generative') {
+    } else if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.contains('generative')) {
       commands = [
           {
               "action": "replace",
