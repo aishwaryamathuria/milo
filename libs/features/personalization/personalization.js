@@ -464,7 +464,7 @@ export const updateFragDataProps = (a, inline, sections, fragment) => {
 };
 
 export function handleCommands(commands, rootEl = document, forceInline = false) {
-  if (true || window.alloy_all.data._adobe_corpnew.digitalData.page.pageInfo.pageName != window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName) {
+  if (window.alloy_all.data._adobe_corpnew.digitalData.page.pageInfo.pageName != window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName) {
     if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.includes('remove-background')) {
       commands = [
           {
@@ -477,7 +477,7 @@ export function handleCommands(commands, rootEl = document, forceInline = false)
               "targetManifestId": false
           }
       ];
-    } else if (true || window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.includes('generative')) {
+    } else if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.includes('generative')) {
       commands = [
           {
               "action": "replace",
