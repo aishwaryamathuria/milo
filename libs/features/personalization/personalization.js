@@ -465,7 +465,7 @@ export const updateFragDataProps = (a, inline, sections, fragment) => {
 
 export function handleCommands(commands, rootEl = document, forceInline = false) {
   if (window.alloy_all.data._adobe_corpnew.digitalData.page.pageInfo.pageName != window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName) {
-    if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.contains('remove-background') {
+    if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.contains('remove-background')) {
       commands = [
           {
               "action": "replace",
