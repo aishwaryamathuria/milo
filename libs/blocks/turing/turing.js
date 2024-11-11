@@ -25,7 +25,7 @@ const rawImgJson = await fetch('https://cc-api-cp-stage.adobe.io/api/v2/ff_commu
 const imgJson = await rawImgJson.json();
 const imgList = [];
 imgJson._embedded.assets.forEach((i) => {
-  const aw = i._embedded.artwork._links.rendition.href;
+  let aw = i._embedded.artwork._links.rendition.href;
   console.log(aw)
   aw = aw.replace("{format}", "png");
   aw = aw.replace("{dimension}", "width");
