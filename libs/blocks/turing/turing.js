@@ -17,7 +17,7 @@ fetch('https://firefall-stage.adobe.io/v1/chat/completions', options)
   .then(response => console.log(response))
   .catch(err => console.error(err));
 }
-export default function init(el) {
+export default async function init(el) {
 genKeywords();
 el.innerHTML = `<div class="carousel-container"><div class="carousel_items"></div></div>`;
 const options = {method: 'GET', headers: {'x-api-key': 'alfred-stage'}};
