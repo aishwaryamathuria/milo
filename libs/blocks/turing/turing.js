@@ -32,7 +32,7 @@ imgJson._embedded.assets.forEach((i) => {
   aw = aw.replace("{dimension}", "width");
   aw = aw.replace("{size}", "400");
   imgList.push(aw);
-  imgTitle.push(i._embedded.title);
+  imgTitle.push(i.title);
 });
 const x = document.querySelector(".carousel_items");
 for (let j = 0; j<=10; j++) {
