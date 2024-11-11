@@ -23,17 +23,15 @@ el.innerHTML = `<div class="carousel-container"><div class="carousel_items"></di
 const options = {method: 'GET', headers: {'x-api-key': 'alfred-stage'}};
 const rawImgJson = await fetch('https://cc-api-cp-stage.adobe.io/api/v2/ff_community/assets?sort=date_desc&size=10', options);
 const imgJson = await rawImgJson.json();
-console.log(imgJson);
+const imgList = [];
 imgJson._embedded.assets.forEach((i) => {
   const aw = i._embedded.artwork._links.rendition.href;
   console.log(aw)
+  aw = aw.replace("{format}", "png");
+  aw = aw.replace("{dimension}", "width");
+  aw = aw.replace("{size}", "400");
+  imgList.push(aw);
 });
-const imgList = ['https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1501862700950-18382cd41497?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=519&q=80',
-          'https://images.unsplash.com/photo-1536697246787-1f7ae568d89a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzR8fHNwYWNlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-          'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8QUl8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-          'https://images.unsplash.com/photo-1673901736622-c3f06b08511f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=874&q=80',
-          ]
 const x = document.querySelector(".carousel_items");
 for (let j = 0; j<=10; j++) {
   imgList.forEach((img, i) => {
