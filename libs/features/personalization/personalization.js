@@ -465,17 +465,31 @@ export const updateFragDataProps = (a, inline, sections, fragment) => {
 
 export function handleCommands(commands, rootEl = document, forceInline = false) {
   if (window.alloy_all.data._adobe_corpnew.digitalData.page.pageInfo.pageName != window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName) {
-    commands = [
-        {
-            "action": "replace",
-            "selector": ".hero-marquee",
-            "pageFilter": "",
-            "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config",
-            "selectorType": "other",
-            "manifestId": false,
-            "targetManifestId": false
-        }
-    ];
+    if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.contains('remove-background') {
+      commands = [
+          {
+              "action": "replace",
+              "selector": ".hero-marquee",
+              "pageFilter": "",
+              "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config",
+              "selectorType": "other",
+              "manifestId": false,
+              "targetManifestId": false
+          }
+      ];
+    } else if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.contains('generative') {
+      commands = [
+          {
+              "action": "replace",
+              "selector": ".hero-marquee",
+              "pageFilter": "",
+              "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config1",
+              "selectorType": "other",
+              "manifestId": false,
+              "targetManifestId": false
+          }
+      ];
+    }
   }
   commands.forEach((cmd) => {
     const { manifestId, targetManifestId, action, selector, target: trgt } = cmd;
