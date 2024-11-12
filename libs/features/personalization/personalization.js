@@ -512,6 +512,33 @@ export function handleCommands(
   forceRootEl = false,
 ) {
   const section1 = document.querySelector('main > div');
+  if (window.alloy_all.data._adobe_corpnew.digitalData.page.pageInfo.pageName != window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName) {
+    if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.includes('remove-background')) {
+      commands = [
+          {
+              "action": "replace",
+              "selector": ".hero-marquee",
+              "pageFilter": "",
+              "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config",
+              "selectorType": "other",
+              "manifestId": false,
+              "targetManifestId": false
+          }
+      ];
+    } else if (window.alloy_all.data._adobe_corpnew.digitalData.previousPage.pageInfo.pageName.includes('generative')) {
+      commands = [
+          {
+              "action": "replace",
+              "selector": ".hero-marquee",
+              "pageFilter": "",
+              "target": "https://main--cc--adobecom.hlx.page/drafts/mathuria/unity/fragments/poc-config1",
+              "selectorType": "other",
+              "manifestId": false,
+              "targetManifestId": false
+          }
+      ];
+    }
+  }
   commands.forEach((cmd) => {
     const { action, content, selector } = cmd;
     cmd.content = forceInline ? addHash(content, INLINE_HASH) : content;
