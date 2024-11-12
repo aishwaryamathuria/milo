@@ -75,6 +75,7 @@ const MILO_BLOCKS = [
   'tabs',
   'table-of-contents',
   'text',
+  'timeline',
   'walls-io',
   'table',
   'table-metadata',
@@ -153,6 +154,10 @@ function getEnv(conf) {
   const query = PAGE_URL.searchParams.get('env');
 
   if (query) return { ...ENVS[query], consumer: conf[query] };
+
+  const { clientEnv } = conf;
+  if (clientEnv) return { ...ENVS[clientEnv], consumer: conf[clientEnv] };
+
   if (host.includes('localhost')) return { ...ENVS.local, consumer: conf.local };
   /* c8 ignore start */
   if (host.includes(`${SLD}.page`)
@@ -225,6 +230,7 @@ export const [setConfig, updateConfig, getConfig] = (() => {
       config.base = config.miloLibs || config.codeRoot;
       config.locale = pathname ? getLocale(conf.locales, pathname) : getLocale(conf.locales);
       config.autoBlocks = conf.autoBlocks ? [...AUTO_BLOCKS, ...conf.autoBlocks] : AUTO_BLOCKS;
+      config.signInContext = conf.signInContext || {};
       config.doNotInline = conf.doNotInline
         ? [...DO_NOT_INLINE, ...conf.doNotInline]
         : DO_NOT_INLINE;
@@ -306,7 +312,7 @@ export function localizeLink(
     const isLocalizedLink = path.startsWith(`/${LANGSTORE}`)
       || path.startsWith(`/${PREVIEW}`)
       || Object.keys(locales).some((loc) => loc !== '' && (path.startsWith(`/${loc}/`)
-      || path.endsWith(`/${loc}`)));
+        || path.endsWith(`/${loc}`)));
     if (isLocalizedLink) return processedHref;
     const urlPath = `${locale.prefix}${path}${url.search}${hash}`;
     return relative ? urlPath : `${url.origin}${urlPath}`;
@@ -391,7 +397,7 @@ export function appendHtmlToLink(link) {
   }
 }
 
-export const loadScript = (url, type) => new Promise((resolve, reject) => {
+export const loadScript = (url, type, { mode } = {}) => new Promise((resolve, reject) => {
   let script = document.querySelector(`head > script[src="${url}"]`);
   if (!script) {
     const { head } = document;
@@ -400,6 +406,7 @@ export const loadScript = (url, type) => new Promise((resolve, reject) => {
     if (type) {
       script.setAttribute('type', type);
     }
+    if (['async', 'defer'].includes(mode)) script.setAttribute(mode, true);
     head.append(script);
   }
 
@@ -447,32 +454,33 @@ export async function loadTemplate() {
   await Promise.all([styleLoaded, scriptLoaded]);
 }
 
+function getBlockData(block) {
+  const name = block.classList[0];
+  const { miloLibs, codeRoot, mep } = getConfig();
+  const base = miloLibs && MILO_BLOCKS.includes(name) ? miloLibs : codeRoot;
+  let path = `${base}/blocks/${name}`;
+  if (mep?.blocks?.[name]) path = mep.blocks[name];
+  const blockPath = `${path}/${name}`;
+  const hasStyles = AUTO_BLOCKS.find((ab) => Object.keys(ab).includes(name))?.styles ?? true;
+
+  return { blockPath, name, hasStyles };
+}
+
 export async function loadBlock(block) {
   if (block.classList.contains('hide-block')) {
     block.remove();
     return null;
   }
-
-  const name = block.classList[0];
-  const hasStyles = AUTO_BLOCKS.find((ab) => Object.keys(ab).includes(name))?.styles ?? true;
-  const { miloLibs, codeRoot, mep } = getConfig();
-
-  const base = miloLibs && MILO_BLOCKS.includes(name) ? miloLibs : codeRoot;
-  let path = `${base}/blocks/${name}`;
-
-  if (mep?.blocks?.[name]) path = mep.blocks[name];
-
-  const blockPath = `${path}/${name}`;
-
+  const { name, blockPath, hasStyles } = getBlockData(block);
   const styleLoaded = hasStyles && new Promise((resolve) => {
     loadStyle(`${blockPath}.css`, resolve);
   });
-
   const scriptLoaded = new Promise((resolve) => {
     (async () => {
       try {
         const { default: init } = await import(`${blockPath}.js`);
         await init(block);
+        block.dataset.blockStatus = 'loaded';
       } catch (err) {
         console.log(`Failed loading ${name}`, err);
         const config = getConfig();
@@ -505,8 +513,7 @@ export function decorateSVG(a) {
 
     const src = textUrl.hostname.includes(`.${SLD}.`) ? textUrl.pathname : textUrl;
 
-    const img = createTag('img', { loading: 'lazy', src });
-    if (altText) img.alt = altText;
+    const img = createTag('img', { loading: 'lazy', src, alt: altText || '' });
     const pic = createTag('picture', null, img);
 
     if (textUrl.pathname === hrefUrl.pathname) {
@@ -639,19 +646,29 @@ const decorateCopyLink = (a, evt) => {
   });
 };
 
-export function convertStageLinks({ anchors, config, hostname }) {
-  if (config.env?.name === 'prod' || !config.stageDomainsMap) return;
-  const matchedRules = Object.entries(config.stageDomainsMap)
-    .find(([domain]) => hostname.includes(domain));
+export function convertStageLinks({ anchors, config, hostname, href }) {
+  const { env, stageDomainsMap, locale } = config;
+  if (env?.name === 'prod' || !stageDomainsMap) return;
+  const matchedRules = Object.entries(stageDomainsMap)
+    .find(([domain]) => (new RegExp(domain)).test(href));
   if (!matchedRules) return;
   const [, domainsMap] = matchedRules;
   [...anchors].forEach((a) => {
+    const hasLocalePrefix = a.pathname.startsWith(locale.prefix);
+    const noLocaleLink = hasLocalePrefix ? a.href.replace(locale.prefix, '') : a.href;
     const matchedDomain = Object.keys(domainsMap)
-      .find((domain) => a.href.includes(domain));
+      .find((domain) => (new RegExp(domain)).test(noLocaleLink));
     if (!matchedDomain) return;
-    a.href = a.href.replace(a.hostname, domainsMap[matchedDomain] === 'origin'
-      ? hostname
-      : domainsMap[matchedDomain]);
+    const convertedLink = noLocaleLink.replace(
+      new RegExp(matchedDomain),
+      domainsMap[matchedDomain] === 'origin'
+        ? `${matchedDomain.includes('https') ? 'https://' : ''}${hostname}`
+        : domainsMap[matchedDomain],
+    );
+    const convertedUrl = new URL(convertedLink);
+    convertedUrl.pathname = `${hasLocalePrefix ? locale.prefix : ''}${convertedUrl.pathname}`;
+    a.href = convertedUrl.toString();
+    if (/(\.page|\.live).*\.html(?=[?#]|$)/.test(a.href)) a.href = a.href.replace(/\.html(?=[?#]|$)/, '');
   });
 }
 
@@ -659,9 +676,8 @@ export function decorateLinks(el) {
   const config = getConfig();
   decorateImageLinks(el);
   const anchors = el.getElementsByTagName('a');
-  const { hostname } = window.location;
-  convertStageLinks({ anchors, config, hostname });
-  return [...anchors].reduce((rdx, a) => {
+  const { hostname, href } = window.location;
+  const links = [...anchors].reduce((rdx, a) => {
     appendHtmlToLink(a);
     a.href = localizeLink(a.href);
     decorateSVG(a);
@@ -687,7 +703,8 @@ export function decorateLinks(el) {
       a.href = a.href.replace(loginEvent, '');
       a.addEventListener('click', (e) => {
         e.preventDefault();
-        window.adobeIMS?.signIn();
+        const { signInContext } = config;
+        window.adobeIMS?.signIn(signInContext);
       });
     }
     const copyEvent = '#_evt-copy';
@@ -696,6 +713,8 @@ export function decorateLinks(el) {
     }
     return rdx;
   }, []);
+  convertStageLinks({ anchors, config, hostname, href });
+  return links;
 }
 
 function decorateContent(el) {
@@ -732,6 +751,8 @@ function decorateDefaults(el) {
 }
 
 function decorateHeader() {
+  const breadcrumbs = document.querySelector('.breadcrumbs');
+  breadcrumbs?.remove();
   const header = document.querySelector('header');
   if (!header) return;
   const headerMeta = getMetadata('header');
@@ -742,10 +763,10 @@ function decorateHeader() {
   }
   header.className = headerMeta || 'global-navigation';
   const metadataConfig = getMetadata('breadcrumbs')?.toLowerCase()
-  || getConfig().breadcrumbs;
+    || getConfig().breadcrumbs;
   if (metadataConfig === 'off') return;
   const baseBreadcrumbs = getMetadata('breadcrumbs-base')?.length;
-  const breadcrumbs = document.querySelector('.breadcrumbs');
+
   const autoBreadcrumbs = getMetadata('breadcrumbs-from-url') === 'on';
   const dynamicNavActive = getMetadata('dynamic-nav') === 'on'
     && window.sessionStorage.getItem('gnavSource') !== null;
@@ -753,16 +774,6 @@ function decorateHeader() {
   if (breadcrumbs) header.append(breadcrumbs);
   const promo = getMetadata('gnav-promo-source');
   if (promo?.length) header.classList.add('has-promo');
-}
-
-async function decorateIcons(area, config) {
-  const icons = area.querySelectorAll('span.icon');
-  if (icons.length === 0) return;
-  const { base } = config;
-  loadStyle(`${base}/features/icons/icons.css`);
-  loadLink(`${base}/img/icons/icons.svg`, { rel: 'preload', as: 'fetch', crossorigin: 'anonymous' });
-  const { default: loadIcons } = await import('../features/icons/icons.js');
-  await loadIcons(icons, config);
 }
 
 export async function customFetch({ resource, withCacheRules }) {
@@ -801,10 +812,11 @@ async function decoratePlaceholders(area, config) {
   if (!area) return;
   const nodes = findReplaceableNodes(area);
   if (!nodes.length) return;
+  area.dataset.hasPlaceholders = 'true';
   const placeholderPath = `${config.locale?.contentRoot}/placeholders.json`;
   placeholderRequest = placeholderRequest
-  || customFetch({ resource: placeholderPath, withCacheRules: true })
-    .catch(() => ({}));
+    || customFetch({ resource: placeholderPath, withCacheRules: true })
+      .catch(() => ({}));
   const { decoratePlaceholderArea } = await import('../features/placeholders.js');
   await decoratePlaceholderArea({ placeholderPath, placeholderRequest, nodes });
 }
@@ -893,7 +905,7 @@ export async function decorateFooterPromo(doc = document) {
 }
 
 const getMepValue = (val) => {
-  const valMap = { on: true, off: false, gnav: 'gnav' };
+  const valMap = { on: true, off: false, postLCP: 'postlcp' };
   const finalVal = val?.toLowerCase().trim();
   if (finalVal in valMap) return valMap[finalVal];
   return finalVal;
@@ -939,7 +951,7 @@ let imsLoaded;
 export async function loadIms() {
   imsLoaded = imsLoaded || new Promise((resolve, reject) => {
     const {
-      locale, imsClientId, imsScope, env, base, adobeid,
+      locale, imsClientId, imsScope, env, base, adobeid, imsTimeout,
     } = getConfig();
     if (!imsClientId) {
       reject(new Error('Missing IMS Client ID'));
@@ -947,7 +959,7 @@ export async function loadIms() {
     }
     const [unavMeta, ahomeMeta] = [getMetadata('universal-nav')?.trim(), getMetadata('adobe-home-redirect')];
     const defaultScope = `AdobeID,openid,gnav${unavMeta && unavMeta !== 'off' ? ',pps.read,firefly_api,additional_info.roles,read_organizations' : ''}`;
-    const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
+    const timeout = setTimeout(() => reject(new Error('IMS timeout')), imsTimeout || 5000);
     window.adobeid = {
       client_id: imsClientId,
       scope: imsScope || defaultScope,
@@ -1041,7 +1053,9 @@ async function checkForPageMods() {
 
 async function loadPostLCP(config) {
   await decoratePlaceholders(document.body.querySelector('header'), config);
-  if (config.mep?.targetEnabled === 'gnav') {
+  const sk = document.querySelector('helix-sidekick');
+  if (sk) import('./sidekick-decorate.js').then((mod) => { mod.default(sk); });
+  if (config.mep?.targetEnabled === 'postlcp') {
     /* c8 ignore next 2 */
     const { init } = await import('../features/personalization/personalization.js');
     await init({ postLCP: true });
@@ -1088,8 +1102,7 @@ export function scrollToHashedElement(hash) {
 }
 
 export async function loadDeferred(area, blocks, config) {
-  const event = new Event(MILO_EVENTS.DEFERRED);
-  area.dispatchEvent(event);
+  area.dispatchEvent(new Event(MILO_EVENTS.DEFERRED));
 
   if (area !== document) {
     return;
@@ -1109,12 +1122,6 @@ export async function loadDeferred(area, blocks, config) {
     });
   }
 
-  import('./samplerum.js').then(({ sampleRUM }) => {
-    sampleRUM('lazy');
-    sampleRUM.observe(blocks);
-    sampleRUM.observe(area.querySelectorAll('picture > img'));
-  });
-
   if (getMetadata('pageperf') === 'on') {
     import('./logWebVitals.js')
       .then((mod) => mod.default(getConfig().mep, {
@@ -1126,6 +1133,12 @@ export async function loadDeferred(area, blocks, config) {
     import('../features/personalization/preview.js')
       .then(({ default: decoratePreviewMode }) => decoratePreviewMode());
   }
+  if (config?.dynamicNavKey && config?.env?.name !== 'prod') {
+    const { miloLibs } = config;
+    loadStyle(`${miloLibs}/features/dynamic-navigation/status.css`);
+    const { default: loadDNStatus } = await import('../features/dynamic-navigation/status.js');
+    loadDNStatus();
+  }
 }
 
 function initSidekick() {
@@ -1134,7 +1147,7 @@ function initSidekick() {
     init({ createTag, loadBlock, loadScript, loadStyle });
   };
 
-  if (document.querySelector('helix-sidekick')) {
+  if (document.querySelector('aem-sidekick, helix-sidekick')) {
     initPlugins();
   } else {
     document.addEventListener('sidekick-ready', () => {
@@ -1147,7 +1160,7 @@ function decorateMeta() {
   const { origin } = window.location;
   const contents = document.head.querySelectorAll(`[content*=".${SLD}."]`);
   contents.forEach((meta) => {
-    if (meta.getAttribute('property') === 'hlx:proxyUrl') return;
+    if (meta.getAttribute('property') === 'hlx:proxyUrl' || meta.getAttribute('name')?.endsWith('schedule')) return;
     try {
       const url = new URL(meta.content);
       const localizedLink = localizeLink(`${origin}${url.pathname}`);
@@ -1171,15 +1184,10 @@ function decorateMeta() {
 function decorateDocumentExtras() {
   decorateMeta();
   decorateHeader();
-
-  import('./samplerum.js').then(({ addRumListeners }) => {
-    addRumListeners();
-  });
 }
 
-async function documentPostSectionLoading(config) {
+async function documentPostSectionLoading(area, config) {
   decorateFooterPromo();
-
   const appendage = getMetadata('title-append');
   if (appendage) {
     import('../features/title-append/title-append.js').then((module) => module.default(appendage));
@@ -1222,41 +1230,62 @@ export function partition(arr, fn) {
   );
 }
 
-async function processSection(section, config, isDoc) {
-  const inlineFrags = [...section.el.querySelectorAll('a[href*="#_inline"]')];
-  if (inlineFrags.length) {
-    const { default: loadInlineFrags } = await import('../blocks/fragment/fragment.js');
-    const fragPromises = inlineFrags.map((link) => loadInlineFrags(link));
-    await Promise.all(fragPromises);
-    const newlyDecoratedSection = decorateSection(section.el, section.idx);
-    section.blocks = newlyDecoratedSection.blocks;
-    section.preloadLinks = newlyDecoratedSection.preloadLinks;
+const preloadBlockResources = (blocks = []) => blocks.map((block) => {
+  if (block.classList.contains('hide-block')) return null;
+  const { blockPath, hasStyles, name } = getBlockData(block);
+  if (['marquee', 'hero-marquee'].includes(name)) {
+    loadLink(`${getConfig().base}/utils/decorate.js`, { rel: 'preload', as: 'script', crossorigin: 'anonymous' });
   }
-  await decoratePlaceholders(section.el, config);
+  loadLink(`${blockPath}.js`, { rel: 'preload', as: 'script', crossorigin: 'anonymous' });
+  return hasStyles && new Promise((resolve) => { loadStyle(`${blockPath}.css`, resolve); });
+}).filter(Boolean);
 
+async function resolveInlineFrags(section) {
+  const inlineFrags = [...section.el.querySelectorAll('a[href*="#_inline"]')];
+  if (!inlineFrags.length) return;
+  const { default: loadInlineFrags } = await import('../blocks/fragment/fragment.js');
+  const fragPromises = inlineFrags.map((link) => loadInlineFrags(link));
+  await Promise.all(fragPromises);
+  const newlyDecoratedSection = decorateSection(section.el, section.idx);
+  section.blocks = newlyDecoratedSection.blocks;
+  section.preloadLinks = newlyDecoratedSection.preloadLinks;
+}
+
+export function setIconsIndexClass(icons) {
+  [...icons].forEach((icon) => {
+    const parent = icon.parentNode;
+    const children = parent.childNodes;
+    const nodeIndex = [...children].indexOf.call(children, icon);
+    let indexClass = (nodeIndex === children.length - 1) ? 'last' : 'middle';
+    if (nodeIndex === 0) indexClass = 'first';
+    if (children.length === 1) indexClass = 'only';
+    icon.classList.add(`node-index-${indexClass}`);
+  });
+}
+
+async function processSection(section, config, isDoc) {
+  await resolveInlineFrags(section);
+  const firstSection = section.el.dataset.idx === '0';
+  const stylePromises = firstSection ? preloadBlockResources(section.blocks) : [];
+  preloadBlockResources(section.preloadLinks);
+  await Promise.all([
+    decoratePlaceholders(section.el, config),
+  ]);
+  const loadBlocks = [...stylePromises];
   if (section.preloadLinks.length) {
-    const [modals, nonModals] = partition(section.preloadLinks, (block) => block.classList.contains('modal'));
-    const preloads = nonModals.map((block) => loadBlock(block));
-    await Promise.all(preloads);
+    const [modals, blocks] = partition(section.preloadLinks, (block) => block.classList.contains('modal'));
+    await Promise.all(blocks.map((block) => loadBlock(block)));
     modals.forEach((block) => loadBlock(block));
   }
 
-  const loaded = section.blocks.map((block) => loadBlock(block));
-
-  await decorateIcons(section.el, config);
+  section.blocks.forEach((block) => loadBlocks.push(loadBlock(block)));
 
   // Only move on to the next section when all blocks are loaded.
-  await Promise.all(loaded);
+  await Promise.all(loadBlocks);
 
-  // Show the section when all blocks inside are done.
   delete section.el.dataset.status;
-
-  if (isDoc && section.el.dataset.idx === '0') {
-    await loadPostLCP(config);
-  }
-
+  if (isDoc && firstSection) await loadPostLCP(config);
   delete section.el.dataset.idx;
-
   return section.blocks;
 }
 
@@ -1273,6 +1302,11 @@ export async function loadArea(area = document) {
     decorateDocumentExtras();
   }
 
+  const allIcons = area.querySelectorAll('span.icon');
+  if (allIcons.length) {
+    setIconsIndexClass(allIcons);
+  }
+
   const sections = decorateSections(area, isDoc);
 
   const areaBlocks = [];
@@ -1285,13 +1319,20 @@ export async function loadArea(area = document) {
     });
   }
 
+  if (allIcons.length) {
+    const { default: loadIcons, decorateIcons } = await import('../features/icons/icons.js');
+    await decorateIcons(area, allIcons, config);
+    await loadIcons(allIcons);
+  }
+
   const currentHash = window.location.hash;
   if (currentHash) {
     scrollToHashedElement(currentHash);
   }
 
-  if (isDoc) await documentPostSectionLoading(config);
-
+  if (isDoc) {
+    await documentPostSectionLoading(area, config);
+  }
   await loadDeferred(area, areaBlocks, config);
 }
 
