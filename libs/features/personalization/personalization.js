@@ -766,7 +766,8 @@ async function getPersonalizationVariant(manifestPath, variantNames = [], varian
   const options = {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: '{"ecid":"ecid1"}'
+    body: '{"ecid":"ecid1"}',
+    mode: 'no-cors'
   };
   const { segment } = await fetch('http://localhost:8080/segment', options);
   return segment
