@@ -763,6 +763,13 @@ export const getEntitlements = async (data) => {
 };
 
 async function getPersonalizationVariant(manifestPath, variantNames = [], variantLabel = null) {
+  const options = {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+    body: '{"ecid":"ecid1"}'
+  };
+  const { segment } = await fetch('http://localhost:8080/segment', options);
+  return segment
   const config = getConfig();
   if (config.mep?.variantOverride?.[manifestPath]) {
     return config.mep.variantOverride[manifestPath];
