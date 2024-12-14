@@ -769,7 +769,7 @@ async function getPersonalizationVariant(manifestPath, variantNames = [], varian
     body: '{"ecid":"ecid1"}',
     mode: 'no-cors'
   };
-  const { segment } = await fetch('http://localhost:8080/segment', options);
+  const { segment } = await fetch('http://tldprsnlzn.corp.adobe.com:8080/segment', options);
   return segment
   const config = getConfig();
   if (config.mep?.variantOverride?.[manifestPath]) {
