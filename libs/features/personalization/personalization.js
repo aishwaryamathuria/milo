@@ -768,8 +768,9 @@ async function getPersonalizationVariant(manifestPath, variantNames = [], varian
     headers: {'Content-Type': 'application/json'},
     body: '{"ecid":"ecid1"}'
   };
-  const { segment } = await fetch('http://tldprsnlzn.corp.adobe.com:8080/segment', options);
-  return segment
+  const res = await fetch('http://tldprsnlzn.corp.adobe.com:8080/segment', options);
+  const { data } = await res.json();
+  return JSON.parse(data)['segment'];
   const config = getConfig();
   if (config.mep?.variantOverride?.[manifestPath]) {
     return config.mep.variantOverride[manifestPath];
