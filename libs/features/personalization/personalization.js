@@ -766,8 +766,7 @@ async function getPersonalizationVariant(manifestPath, variantNames = [], varian
   const options = {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: '{"ecid":"ecid1"}',
-    mode: 'no-cors'
+    body: '{"ecid":"ecid1"}'
   };
   const { segment } = await fetch('http://tldprsnlzn.corp.adobe.com:8080/segment', options);
   return segment
