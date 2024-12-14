@@ -764,7 +764,7 @@ export const getEntitlements = async (data) => {
 
 async function getPersonalizationVariant(manifestPath, variantNames = [], variantLabel = null) {
   const options = {
-    method: 'GET',
+    method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: '{"ecid":"ecid1"}'
   };
